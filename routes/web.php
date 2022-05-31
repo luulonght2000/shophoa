@@ -29,9 +29,19 @@ Route::prefix('/')->group(function () {
     Route::resource('/', \App\Http\Controllers\HomeController::class);
     Route::get('/product', 'App\Http\Controllers\HomeController@product');
     Route::get('/productDetail/{id}', 'App\Http\Controllers\HomeController@productDetail');
+    Route::get('/category-page/{id}', [App\Http\Controllers\HomeController::class, 'category_page']);
     Route::get('/blog', 'App\Http\Controllers\HomeController@blog');
     Route::get('/contact', 'App\Http\Controllers\HomeController@contact')->name('contact');
     Route::resource('profile', App\Http\Controllers\ClientController::class)->middleware('checkProfile');
+});
+
+//===============================Cart Checkout=============================================
+Route::prefix('/')->middleware('checkAddCart')->group(function () {
+    Route::post('/save-cart', [\App\Http\Controllers\ClientController::class, 'save_cart']);
+    Route::get('/show-cart', [\App\Http\Controllers\ClientController::class, 'show_cart'])->name('show.cart');
+    Route::post('/update-cart-quantity', [\App\Http\Controllers\ClientController::class, 'update_cart_quantity']);
+    Route::get('/delete-to-cart/{rowId}', [\App\Http\Controllers\ClientController::class, 'delete_to_cart']);
+    Route::get('/checkout', [\App\Http\Controllers\ClientController::class, 'checkout']);
 });
 
 

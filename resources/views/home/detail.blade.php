@@ -33,19 +33,22 @@
             <i class="fa fa-star-half-o"></i>
             <span>({{$product->viewed}})</span>
           </div>
-          <div class="product__details__price">Giá bán: {{$product->price}}đ
-            <p style="display: inline; text-decoration: line-through">{{$product->old_price}}</p>
-          </div>
-          <p>{{$product->description}}</p>
-          <div class=" product__details__quantity">
-            <div class="quantity">
-              <div class="pro-qty">
-                <input type="text" value="1">
+          <form action="{{'/save-cart'}}" method="POST">
+            @csrf
+            <div class="product__details__price">Giá bán: {{$product->price}}đ
+              <p style="display: inline; text-decoration: line-through">{{$product->old_price}}</p>
+            </div>
+            <p>{{$product->description}}</p>
+            <div class=" product__details__quantity">
+              <div class="quantity">
+                <div class="pro-qty">
+                  <input name="qty" type="number" min="1" value="1">
+                </div>
               </div>
             </div>
-          </div>
-          <a href="#" class="primary-btn">Thanh Toán</a>
-          <a href="#" class="heart-icon"><span class="icon_heart_alt"></span></a>
+            <input name="productid_hidden" type="hidden" value="{{$product->id}}">
+            <button type="submit" class="btn btn-success"><i class="fa fa-shopping-cart"></i>Add To Cart</button>
+          </form>
           <ul>
             <li><b>Availability</b> <span>In Stock</span></li>
             <li><b>Shipping</b> <span>01 day shipping. <samp>Free pickup today</samp></span></li>

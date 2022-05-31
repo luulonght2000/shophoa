@@ -14,8 +14,9 @@
     </div>
     <div class="humberger__menu__cart">
         <ul>
+            <li><a href="#"><i class="fa fa-user"></i></a></li>
             <li><a href="#"><i class="fa fa-heart"></i> <span>1</span></a></li>
-            <li><a href="#"><i class="fa fa-shopping-bag"></i> <span>3</span></a></li>
+            <li><a href="{{url('/shoping-cart')}}"><i class="fa fa-shopping-bag"></i> <span>3</span></a></li>
         </ul>
         <div class="header__cart__price">item: <span>$150.00</span></div>
     </div>
@@ -40,7 +41,7 @@
             <li><a href="#">Pages</a>
                 <ul class="header__menu__dropdown">
                     <li><a href="./shop-details.html">Shop Details</a></li>
-                    <li><a href="./shoping-cart.html">Shoping Cart</a></li>
+                    <li><a href='{{url("/shoping-cart")}}'>Shoping Cart</a></li>
                     <li><a href="./checkout.html">Check Out</a></li>
                     <li><a href="./blog-details.html">Blog Details</a></li>
                 </ul>
@@ -100,20 +101,11 @@
                                 }
                             </style>
                             <div class="auth">
-                                <?php  
-                                   $name = session()->get('name');
-                                   if($name)
-                                   {
-                                       echo $name;
-                                   } else { ?>
-                                    
-                                    <a href="/register"><i class="fa fa-user"></i> register</a>
-                                   <?php } ?>
                                 @if(Auth::check())
                                     @if (Auth::user()->is_admin==1)
-                                    Xin chào: <a href="">{{Auth::user()->name}}</a>
+                                    Xin chào: <a href="{{url('admin/home')}}">{{Auth::user()->email}}</a>
                                     @else
-                                    Xin chào:  <a href="{{route('profile.edit', ['profile'=>Auth::user()->id])}}">{{Auth::user()->name}}</a>
+                                    Xin chào:  <a href="{{route('profile.edit', ['profile'=>Auth::user()->id])}}">{{Auth::user()->email}}</a>
                                     @endif
                                 @else
                                 <a href="/login"><i class="fa fa-user"></i> LogIn</a>
@@ -121,29 +113,14 @@
                             </div>
                         </div>
                         <div class="header__top__right__language">
-                            <?php  
-                                   $name = session()->get('name');
-                                   if($name)
-                                   { ?>
-                                    <a href="{{route('logout')}}"><i class="fa fa-user"></i> LogOut</a>
-                                    
-                                   <?php } ?>
-                                    
-                            {{-- <div class="auth">
+                            <div class="auth">
                                 @if(Auth::check())
                                 <a href="{{route('logout')}}"><i class="fa fa-user"></i> LogOut</a>
                                 @else
-                                <a href="/register"><i class="fa fa-user"></i> register</a>
+                                <a href="/register"><i class="fa fa-user"></i> Register</a>
                                 @endif
-                            </div> --}}
-
+                            </div>
                         </div>
-                        <!-- <div class="header__top__right__auth">
-                            <a href="/login"><i class="fa fa-user"></i> Login</a>
-                            {{-- @if(Auth::check())
-                            Xin chào: {{Auth::user()->email}}
-                            @endif --}}
-                        </div> -->
                     </div>
                 </div>
             </div>
@@ -164,7 +141,7 @@
                         <li><a href="#">Pages</a>
                             <ul class="header__menu__dropdown">
                                 <li><a href="./shop-details.html">Shop Details</a></li>
-                                <li><a href="./shoping-cart.html">Shoping Cart</a></li>
+                                <li><a href="{{url("/shoping-cart")}}S">Shoping Cart</a></li>
                                 <li><a href="./checkout.html">Check Out</a></li>
                                 <li><a href="./blog-details.html">Blog Details</a></li>
                             </ul>
@@ -177,8 +154,12 @@
             <div class="col-lg-3">
                 <div class="header__cart">
                     <ul>
+                        <li> @if(Auth::check())
+                            <a href="{{route('profile.edit', ['profile'=>Auth::user()->id])}}"><i class="fa fa-user"></i></a>
+                            @endif
+                        </li>
                         <li><a href="#"><i class="fa fa-heart"></i> <span>1</span></a></li>
-                        <li><a href="#"><i class="fa fa-shopping-bag"></i> <span>3</span></a></li>
+                        <li><a href="{{url('/show-cart')}}"><i class="fa fa-shopping-bag"></i><span>3</span> </a></li>
                     </ul>
                     <div class="header__cart__price">item: <span>$150.00</span></div>
                 </div>
@@ -203,7 +184,7 @@
                     </div>
                     <ul>
                         @foreach($categories as $category)
-                        <li><a href="#">{{$category->name}}</a></li>
+                        <li><a href='{{url("/category-page/$category->id")}}'>{{$category->name}}</a></li>
                         @endforeach
                     </ul>
                 </div>

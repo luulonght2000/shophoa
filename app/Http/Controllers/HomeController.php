@@ -25,7 +25,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $products = ProductModel::orderBy('id', 'DESC')->paginate(12);
+        $products = ProductModel::orderBy('id', 'DESC')->paginate(11);
         $categories = CategoryModel::orderBy('id', 'DESC')->get();
 
         return view('home', ['products' => $products, 'categories' => $categories]);
@@ -55,5 +55,14 @@ class HomeController extends Controller
         $product = ProductModel::all();
         $categories = CategoryModel::orderBy('id', 'DESC')->get();
         return view('home.contact', ['product' => $product, 'categories' => $categories]);
+    }
+
+    public function category_page($id)
+    {
+        $products = ProductModel::orderBy('id', 'DESC')->where('category_id', $id)->get();
+        $categories = CategoryModel::orderBy('id', 'DESC')->get();
+        $category = CategoryModel::findOrFail($id);
+
+        return view('home.category_page', ['products' => $products, 'categories' => $categories, 'category' => $category]);
     }
 }
