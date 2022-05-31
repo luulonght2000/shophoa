@@ -25,10 +25,7 @@ class SocialController extends Controller
             $account_name = User::where('id', $authUser->user)->first();
             session()->put('name', $account_name->name);
             session()->put('id', $account_name->id);
-        } elseif ($customer_new) {
-            $account_name = User::where('id', $authUser->user)->first();
-            session()->put('name', $account_name->name);
-            session()->put('id', $account_name->id);
+            Auth
         }
 
         return redirect('/')->with('message', 'Đăng nhập Admin thành công');
