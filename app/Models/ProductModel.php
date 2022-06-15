@@ -23,4 +23,9 @@ class ProductModel extends Model
     {
         return $this->hasMany('App\Models\CommentModel');
     }
+
+    public function images()
+    {
+        return $this->hasMany(\App\Models\ImagesProductModel::class);
+    }
 }

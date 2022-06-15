@@ -61,6 +61,7 @@
 
   <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
   <link href="{{asset('fontawesome/css/all.css')}}" rel="stylesheet">
+  
   </head>
 
   <body>
@@ -207,6 +208,11 @@
               <li class="menu-item">
                 <a href="{{url('admin/user')}}" class="menu-link">
                   <div data-i18n="User">Users</div>
+                </a>
+              </li>
+              <li class="menu-item">
+                <a href="{{url('admin/manage-order')}}" class="menu-link">
+                  <div data-i18n="Style">Order</div>
                 </a>
               </li>
               <li class="menu-item">
@@ -618,6 +624,7 @@
 	<script src="{{asset('Admin_2/vendor/libs/popper/popper.js')}}"></script>
 	<script src="{{asset('Admin_2/vendor/js/bootstrap.js')}}"></script>
 	<script src="{{asset('Admin_2/vendor/libs/perfect-scrollbar/perfect-scrollbar.js')}}"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
 	<script src="{{asset('Admin_2/vendor/js/menu.js')}}"></script>
     <!-- endbuild -->

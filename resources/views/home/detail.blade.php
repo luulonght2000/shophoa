@@ -2,24 +2,26 @@
 
 @section('content')
 
+<style>
+  #imageGallery img{
+    width: 100%;
+  }
+</style>
 <section class="product-details spad">
   <div class="container">
     <div class="row">
       <div class="col-lg-6 col-md-6">
         <div class="product__details__pic">
-          <div class="product__details__pic__item">
-            @if(file_exists(public_path("./uploads/{$product->id}.jpg")))
-            <img width="100%" height="100%" src={{"/uploads/{$product->id}.jpg"}} alt="">
-            @else
-            <img width="100%" height="100%" src={{"/uploads/no_photo.png"}} alt="">
-            @endif
-          </div>
-          <div class="product__details__pic__slider owl-carousel">
-            <img data-imgbigurl="img/product/details/product-details-2.jpg" src="/img/product/details/thumb-1.jpg" alt="">
-            <img data-imgbigurl="img/product/details/product-details-3.jpg" src="/img/product/details/thumb-2.jpg" alt="">
-            <img data-imgbigurl="img/product/details/product-details-5.jpg" src="/img/product/details/thumb-3.jpg" alt="">
-            <img data-imgbigurl="img/product/details/product-details-4.jpg" src="/img/product/details/thumb-4.jpg" alt="">
-          </div>
+          <ul id="imageGallery">
+            <li data-thumb="{{"/uploads/$product->id.jpg"}}" data-src="{{"/uploads/$product->id.jpg"}}">
+              <img src="{{"/uploads/$product->id.jpg"}}" alt="Không có ảnh" style="height: 600px"/>
+            </li>
+            @for ($i=1; $i<4; $i++)
+              <li data-thumb="{{"/files/$product->id-$i.jpg"}}" data-src="{{"/files/$product->id-$i.jpg"}}">
+                <img src="{{"/files/$product->id-$i.jpg"}}" style="height: 600px" />
+              </li>
+            @endfor
+          </ul>
         </div>
       </div>
       <div class="col-lg-6 col-md-6">
@@ -36,7 +38,7 @@
           <form action="{{'/save-cart'}}" method="POST">
             @csrf
             <div class="product__details__price">Giá bán: {{$product->price}}đ
-              <p style="display: inline; text-decoration: line-through">{{$product->old_price}}</p>
+              <p style="display: inline; text-decoration: line-through">{{$product->old_price}}đ</p>
             </div>
             <p>{{$product->description}}</p>
             <div class=" product__details__quantity">

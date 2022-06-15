@@ -11,7 +11,15 @@
       <div class="row">
         <div class="col-md-12">
           <div class="card mb-4">
-            <h5 class="card-header" style="color: red">Edit Flower</h5>
+            <div class="row">
+              <div class="col-md-6">
+                <h5 class="card-header" style="color: red">Edit Flower</h5>
+              </div>
+  
+              <div class="col-md-6">
+                <a href='{{url("/admin/add-images/$product->id")}}'><button style="float: right" class="btn btn-primary me-2">Add images</button></a>
+              </div>
+            </div>
             <hr class="my-0" />
             <div class="card-body">
               <form action="{{route('product.update', ['product'=>$product->id])}}" method="post" enctype="multipart/form-data">

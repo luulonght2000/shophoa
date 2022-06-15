@@ -31,67 +31,55 @@
             </div>
             <div class="checkout__form">
                 <h4>Billing Details</h4>
-                <form action="{{url('/save-checkout')}}" method="post">
-                  @csrf
-                    <div class="row">
-                        <div class="col-lg-8 col-md-6">
-                            <div class="checkout__input">
-                                <p>Full Name<span>*</span></p>
-                                <input type="text" name="shipping_name">
-                            </div>
-                            <div class="checkout__input">
-                                <p>Address<span>*</span></p>
-                                <input type="text" placeholder="Street Address" name="shipping_address" class="checkout__input__add">
-                            </div>
-                            <div class="row">
-                                <div class="col-lg-6">
-                                    <div class="checkout__input">
-                                        <p>Phone<span>*</span></p>
-                                        <input type="text" name="shipping_phone">
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="checkout__input">
-                                        <p>Email<span>*</span></p>
-                                        <input type="text" name="shipping_email">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="checkout__input">
-                                <p>Order notes<span>*</span></p>
-                                <input type="text"
-                                    placeholder="Notes about your order, e.g. special notes for delivery.">
-                            </div>
-                        </div>
-                        <div class="col-lg-4 col-md-6">
-                            <div class="checkout__order">
-                                <h4>Your Order</h4>
-                                <div class="checkout__order__products">Products <span>Total</span></div>
-                                <ul>
-                                    <li>Vegetable’s Package <span>$75.99</span></li>
-                                    <li>Fresh Vegetable <span>$151.99</span></li>
-                                    <li>Organic Bananas <span>$53.99</span></li>
-                                </ul>
-                                <div class="checkout__order__subtotal">Subtotal <span>$750.99</span></div>
-                                <div class="checkout__order__total">Total <span>$750.99</span></div>   
-                                <div class="checkout__input__checkbox">
-                                    <label for="payment">
-                                        Check Payment
-                                        <input type="checkbox" id="payment">
-                                        <span class="checkmark"></span>
-                                    </label>
-                                </div>
-                                <div class="checkout__input__checkbox">
-                                    <label for="paypal">
-                                        Paypal
-                                        <input type="checkbox" id="paypal">
-                                        <span class="checkmark"></span>
-                                    </label>
-                                </div>
-                                <button type="submit" class="site-btn">PLACE ORDER</button>
-                            </div>
-                        </div>
-                    </div>
+                <form action="{{url('/save-checkout-user')}}" method="post">
+                    @csrf
+                        <div class="row">
+                          <div class="col-lg-8 col-md-6">
+                              <div class="checkout__input">
+                                  <p>Full Name<span>*</span></p>
+                                  <input type="text" name="shipping_name" placeholder="" value="{{Auth::user()->name}}">
+                              </div>
+                              <div class="checkout__input">
+                                  <p>Address<span>*</span></p>
+                                  <input type="text" value="{{Auth::user()->address}}" name="shipping_address" class="checkout__input__add" value="{{old('shipping_address')}}" required>
+                              </div>
+                              <div class="row">
+                                  <div class="col-lg-6">
+                                      <div class="checkout__input">
+                                          <p>Phone<span>*</span></p>
+                                          <input type="text" name="shipping_phone" value="{{old('shipping_phone')}}" >
+                                          <span class="error-message" style="color: red">{{ $errors->first('shipping_phone') }}</span>
+                                      </div>
+                                  </div>
+                                  <div class="col-lg-6">
+                                      <div class="checkout__input">
+                                          <p>Email<span>*</span></p>
+                                          <input type="text" name="shipping_email" placeholder="{{Auth::user()->email}}">
+                                          <span class="error-message" style="color: red">{{ $errors->first('shipping_email') }}</span>
+                                      </div>
+                                  </div>
+                              </div>
+                              <div class="checkout__input">
+                                  <p>Order notes<span>*</span></p>
+                                  <input type="text" name="shipping_note"
+                                      placeholder="Ghi chú." value="{{old('shipping_note')}}">
+                              </div>
+                          </div>
+                          <div class="col-lg-4 col-md-6">
+                              <div class="checkout__order">
+                                  <h4>Your Order</h4>
+                                  <div class="checkout__order__products">Products  <span>Quantity</span></div>
+                                  <ul>
+                                      @foreach ($contents as $content)
+                                      <li style="text-transform: capitalize">{{$content->name}}<span>{{$content->qty}}</span></li>
+                                      @endforeach
+                                  </ul>
+                                  <div class="checkout__order__subtotal">Subtotal <span>{{Cart::subtotal(0).' '.'vnđ'}}</span></div>
+                                  
+                                  <button type="submit" name="send_order" class="site-btn">PLACE ORDER</button>
+                              </div>
+                          </div>
+                      </div>
                 </form>
             </div>
         </div>

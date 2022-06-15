@@ -38,10 +38,14 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Glide.js/3.4.1/css/glide.theme.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Glide.js/3.4.1/glide.min.js">
   </script>
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
   <script src="js/glide.js"></script>
   <script src="./js/jquery-3.6.0.js"></script>
   <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
   <link href="{{asset('fontawesome/css/all.css')}}" rel="stylesheet">
+  <link href="{{asset('css/lightgallery.min.css')}}" rel="stylesheet">
+  <link href="{{asset('css/lightslider.css')}}" rel="stylesheet">
+  <link href="{{asset('css/prettify.css')}}" rel="stylesheet">
 </head>
 
 <body>
@@ -49,7 +53,30 @@
   @yield('master_content')
 
   {{-- <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script> --}}
-  <script src="{{ asset('dist/js/sweetalert.min.js') }}"></script>
+  <script src="{{ asset('js/jquery.min.js') }}"></script>
+  <script src="{{ asset('js/lightgallery-all.min.js') }}"></script>
+  <script src="{{ asset('js/lightslider.js') }}"></script>
+  <script src="{{ asset('js/prettify.js') }}"></script> 
+
+  <script type="text/javascript">
+    $(document).ready(function() {
+        $('#imageGallery').lightSlider({
+            gallery:true,
+            item:1,
+            loop:true,
+            thumbItem:4,
+            slideMargin:0,
+            enableDrag: false,
+            currentPagerPosition:'left',
+            onSliderLoad: function(el) {
+                el.lightGallery({
+                    selector: '#imageGallery .lslide'
+                });
+            }   
+        });  
+      });
+  </script>
+
   <script type="text/javascript">
     $(document).ready(function(){
       $('.add-to-cart').click(function(){
@@ -76,6 +103,12 @@
             alert(data);
           }
         });
+      });
+
+    $(".fa-user").click(function(event){
+          $(".target").toggle('slow', function(){
+            $(".log").text('');
+          });
       });
     });
   </script>

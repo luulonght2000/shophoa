@@ -24,6 +24,17 @@
     <!-- Shoping Cart Section Begin -->
     <section class="shoping-cart spad">
         <div class="container">
+            @if(session()->has('error'))
+            <div class="alert alert-danger">
+            {{ session()->get('error') }}
+            </div>
+            @endif
+            @if(session()->has('success'))
+            <div class="alert alert-success">
+            {{ session()->get('success') }}
+            </div>
+            @endif
+
             <div class="row">
                 <div class="col-lg-12">
                     <div class="shoping__cart__table">
