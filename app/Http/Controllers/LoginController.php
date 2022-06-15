@@ -28,7 +28,7 @@ class LoginController extends Controller
     {
         Session::flush();
         Auth::logout();
-        return redirect()->route('admin.auth.login');
+        return redirect()->route('welcome');
     }
 
     /**

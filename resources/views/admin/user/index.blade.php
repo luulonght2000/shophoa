@@ -86,10 +86,10 @@
                         @foreach($users as $user)
                         <tr>
                           <td>
-                            @if(file_exists(public_path("/uploads_admin/{$user->id}.jpg")))
-                            <img width="75" height="100" src={{"/uploads_admin/{$user->id}.jpg"}} alt="">
+                            @if(file_exists(public_path("/uploads_user/{$user->id}.jpg")))
+                            <img width="100" height="100" src={{"/uploads_user/{$user->id}.jpg"}} alt="">
                             @else
-                            <img width="75" height="100" src={{"/uploads_admin/no_photo.jpg"}} alt="">
+                            <img width="100" height="100" src={{"/uploads_admin/no_photo.jpg"}} alt="">
                             @endif
                           </td>
                           <td>{{$user->name}}</td>

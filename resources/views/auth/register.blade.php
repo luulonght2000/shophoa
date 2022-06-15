@@ -119,7 +119,7 @@
                     <h3>Register</h3>
                     <div class="d-flex justify-content-end social_icon">
                         <span><i class="fab fa-facebook-square"></i></span>
-                        <span><i class="fab fa-google-plus-square"></i></span>
+                        <a href="{{url('/login-google')}}"> <span><i class="fab fa-google-plus-square"></i></span></a>
                         <span><i class="fab fa-twitter-square"></i></span>
                     </div>
                     @if(session('error'))

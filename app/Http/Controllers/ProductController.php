@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\CategoryModel;
+use App\Models\ImagesProductModel;
 use App\Models\ProductModel;
 use App\Models\StyleModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\File;
 
 class ProductController extends Controller
 {
@@ -21,14 +23,11 @@ class ProductController extends Controller
         $products = ProductModel::orderBy('id', 'DESC')->paginate(10);
         $category = CategoryModel::orderBy('id', 'DESC')->get();
 
-        $last_id = $request->session()->get("last_product_id", 0);
-        $last_product = $last_id ? ProductModel::findOrFail($last_id) : null;
-
         if ($key = request()->key) {
             $products = ProductModel::orderBy('id', 'DESC')->with('category')->where('name', 'like', '%' . $key . '%')->paginate(10);
         }
 
-        return view('admin/product.index', ['products' => $products, 'category' => $category, 'last_product' => $last_product]);
+        return view('admin/product.index', ['products' => $products, 'category' => $category]);
     }
 
     /**
@@ -166,6 +165,38 @@ class ProductController extends Controller
         }
     }
 
+    public function view_add_images(Request $request, $id){
+        $product = ProductModel::findOrFail($id);
+        $images = ImagesProductModel::where('product_id', $id)->first();
+        $product_id = $id;
+
+        return view('admin.product.add_images', ['product' => $product, 'images' => $images, 'product_id'=>$product_id]);
+    }
+
+    public function add_images(Request $request){
+        $this->validate($request, [
+            'filename' => 'required',
+            'filename.*' => 'mimes:jpeg, bmp, png, gif, jpg'
+        ]); 
+        $i=1;
+        $id= $request->product_id;
+        if($request->hasfile('filename'))
+        {
+            foreach($request->file('filename') as $file)
+            {
+                $name="$id-$i.jpg";
+                $file->move(public_path().'/files/', $name);  
+                $data[] = $name;  
+                $i++;
+            }
+        }
+        $file= new ImagesProductModel();
+        $file->filenames=json_encode($data);
+        $file->product_id=$id;
+        $file->save();
+        return back()->with('success', 'Your files has been successfully added');
+    }
+
     public function unactive($id)
     {
         ProductModel::where('id', $id)->update(['product_status' => 1]);
@@ -184,10 +215,22 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
         $product = ProductModel::findOrFail($id);
         $product->delete();
+        ImagesProductModel::where('product_id', $id)->delete();
+        $image_uploads_path = public_path("uploads/$id.jpg"); 
+        if(File::exists($image_uploads_path)) {
+            File::delete($image_uploads_path);
+        }
+        for($i=1; $i<10; $i++){
+            $image_files_path = public_path("files/$id-$i.jpg");
+            if(File::exists($image_files_path)) {
+                File::delete($image_files_path);
+            }
+        }
+
         return redirect()->route('product.index');
     }
 }

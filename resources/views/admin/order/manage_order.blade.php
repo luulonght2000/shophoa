@@ -19,21 +19,16 @@ display: block;
     <div class="container-xxl flex-grow-1 container-p-y">
       <div class="row">
         <div class="mb-3 col-md-6">
-          <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Shop /</span> Product</h4>
+          <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Shop /</span> Order</h4>
         </div>
       </div>
       
       <div class="row">
         <div class="mb-6 col-md-12">
-          <ul class="nav nav-pills flex-column flex-md-row mb-3">
-            <li class="nav-item">
-              <a class="nav-link active" href="{{url('admin/product/create')}}">Add Product</a>
-            </li>
-          </ul>
           <div class="card mb-4">
             <div class="row">
               <div  class="mb-3 col-md-6">
-                <h5 class="card-header">List Product</h5>
+                <h5 class="card-header">Quản lý đơn hàng</h5>
               </div>
 
               <div  class="mb-3 col-md-6">
@@ -61,47 +56,29 @@ display: block;
                     <div class="table-wrapper-scroll-y my-custom-scrollbar">
                       <table class="table table-hover table-dark" border="1" >
                         <thead>
-                          <tr style="text-align: center">
-                            <th>Ảnh</th>
-                            <th>Tên hoa</th>
-                            <th>Loại hoa</th>
-                            <th>Kiểu hoa</th>
-                            <th>Giá</th>
+                          <tr>
+                            <th>Tên người đặt</th>
+                            <th>Tổng giá tiền</th>
+                            <th>Tình trạng</th>
+                            <th>Thanh toán</th>
                             <th>Hiển thị</th>
-                            <th>Đã bán</th>
-                            <th>Thao tác</th>
                           </tr>
                         </thead>
                   
-                        @foreach($products as $product)
+                        @foreach($all_order as $order)
                         <tr>
-                          <td>
-                            @if(file_exists(public_path("./uploads/{$product->id}.jpg")))
-                            <img width="75" height="100" src={{"/uploads/{$product->id}.jpg"}} alt="">
-                            @else
-                            <img width="75" height="100" src={{"/uploads/no_photo.png"}} alt="">
-                            @endif
-                          </td>
-                          <td>{{$product->name}}</td>
-                          <td>{{$product->category->name ?? 'None'}}</td>
-                          <td>{{$product->style->name}}</td>
-                          <td>{{$product->price}}</td>
-                          <td>
-                              @if ($product->product_status==0)
-                                <a href="{{url('admin/unactive-product/'.$product->id)}}"><i class="fa-thumb-styling fa fa-thumbs-up" aria-hidden="false"></i></a>
-                              @else
-                                <a href="{{url('admin/active-product/'.$product->id)}}"><i class="fa-thumb-styling fa fa-thumbs-down" aria-hidden="false"></i></a>
-                              @endif
-                          </td>
-                          <td>{{$product->sold}}</td>
+                          <td>{{$order->name}}</td>
+                          <td>{{$order->order_total}}</td>
+                          <td>{{$order->order_status}}</td>
+                          <td>{{$order->payment_status}}</td>
                   
                           <td>
-                            <a href="{{route('product.edit', ['product'=>$product->id])}}"><button type="button" class="btn btn-success" style="width: 80px">Sửa</button></a>
+                            <a href="{{route('order.edit', ['order'=>$order->order_id])}}"><button type="button" class="btn btn-success" style="width: 100px">Xem</button></a>
                   
-                            <form action="{{route('product.destroy', ['product'=>$product->id])}}" method="POST" onsubmit="return(confirm('bạn có thực sự muốn xóa?'))">
+                            <form action="{{route('order.destroy', ['order'=>$order->order_id])}}" method="POST" onsubmit="return(confirm('Bạn có thực sự muốn xóa?'))">
                               @method('DELETE')
                               @csrf
-                              <button type="submit" class="btn btn-danger" style="width: 80px; margin-top: 10px">Xóa</button>
+                              <button type="submit" class="btn btn-danger" style="width: 100px; margin-top: 10px">Xóa</button>
                             </form>
                           </td>
                         </tr>
@@ -109,7 +86,7 @@ display: block;
                       </table>
                     </div><br>
                     <div class="pagination justify-content-center">
-                      {{$products->onEachSide(10)->links()}}
+                      {{$all_order->onEachSide(5)->links()}}
                     </div>
                   </div>
                 </div>

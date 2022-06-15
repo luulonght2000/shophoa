@@ -14,7 +14,13 @@
     </div>
     <div class="humberger__menu__cart">
         <ul>
-            <li><a href="#"><i class="fa fa-user"></i></a></li>
+            <li>
+                <li class="clickme">
+                    @if(Auth::check())
+                        <i class="fa fa-user"></i>
+                    @endif
+                </li>
+            </li>
             <li><a href="#"><i class="fa fa-heart"></i> <span>1</span></a></li>
             <li><a href="{{url('/shoping-cart')}}"><i class="fa fa-shopping-bag"></i> <span>3</span></a></li>
         </ul>
@@ -42,7 +48,6 @@
                 <ul class="header__menu__dropdown">
                     <li><a href="./shop-details.html">Shop Details</a></li>
                     <li><a href='{{url("/shoping-cart")}}'>Shoping Cart</a></li>
-                    <li><a href="./checkout.html">Check Out</a></li>
                     <li><a href="./blog-details.html">Blog Details</a></li>
                 </ul>
             </li>
@@ -142,7 +147,6 @@
                             <ul class="header__menu__dropdown">
                                 <li><a href="./shop-details.html">Shop Details</a></li>
                                 <li><a href="{{url("/shoping-cart")}}S">Shoping Cart</a></li>
-                                <li><a href="./checkout.html">Check Out</a></li>
                                 <li><a href="./blog-details.html">Blog Details</a></li>
                             </ul>
                         </li>
@@ -153,15 +157,32 @@
             </div>
             <div class="col-lg-3">
                 <div class="header__cart">
-                    <ul>
-                        <li> @if(Auth::check())
-                            <a href="{{route('profile.edit', ['profile'=>Auth::user()->id])}}"><i class="fa fa-user"></i></a>
+                    <nav class="header__menu">
+                        <ul>
+                            @if(Auth::check())
+                            @php $id_user=Auth::id(); @endphp
+                            @if (Auth::user()->is_admin===0)
+                            <li><a href="{{route('profile.edit', ['profile'=>Auth::user()->id])}}"><i class="fa fa-user"></i></a>
+                                <ul class="header__menu__dropdown">
+                                    <li>
+                                        @if(file_exists(public_path("/uploads_user/{$id_user}.jpg")))
+                                        <img class="mx-auto d-block" width="70%" height="100" src={{"/uploads_user/{$id_user}.jpg"}} alt="user-avatar" class="d-block rounded">
+                                        @else
+                                        <img class="mx-auto d-block" width="70%" height="100"  src={{"/uploads_user/no_photo.jpg"}} alt="user-avatar" class="d-block rounded">
+                                        @endif
+                                    </li>
+                                    <li><a href="">{{Auth::user()->name}}</a></li>
+                                    <li><a href="{{url('/checkout')}}">Check Out</a></li>
+                                </ul>
+                            </li>
+                            @else
+                            <li>Admin</li>
                             @endif
-                        </li>
-                        <li><a href="#"><i class="fa fa-heart"></i> <span>1</span></a></li>
-                        <li><a href="{{url('/show-cart')}}"><i class="fa fa-shopping-bag"></i><span>3</span> </a></li>
-                    </ul>
-                    <div class="header__cart__price">item: <span>$150.00</span></div>
+                            @endif
+                            <li><a href="#"><i class="fa fa-heart"></i> <span>1</span></a></li>
+                            <li><a href="{{url('/show-cart')}}"><i class="fa fa-shopping-bag"></i><span>{{Cart::count()}}</span> </a></li>
+                        </ul>
+                    </nav>
                 </div>
             </div>
         </div>
