@@ -146,7 +146,7 @@
                         <li><a href="#">Pages</a>
                             <ul class="header__menu__dropdown">
                                 <li><a href="./shop-details.html">Shop Details</a></li>
-                                <li><a href="{{url("/shoping-cart")}}S">Shoping Cart</a></li>
+                                <li><a href="{{url("/show-cart")}}">Shoping Cart</a></li>
                                 <li><a href="./blog-details.html">Blog Details</a></li>
                             </ul>
                         </li>

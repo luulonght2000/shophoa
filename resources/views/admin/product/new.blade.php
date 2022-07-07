@@ -60,6 +60,7 @@
                   <div class="mb-3 col-md-6">
                     <label class="col-sm-2 col-form-label" for="old_price">Giá cũ</label>
                     <input type="number" class="col-sm-10 form-control" id="old_price" placeholder="Giá cũ" name="old_price" value="{{old('old_price')}}">
+                    <span class="error-message" style="color: red">{{ $errors->first('old_price') }}</span>
                   </div>
 
                   <div class="mb-6 col-md-12">

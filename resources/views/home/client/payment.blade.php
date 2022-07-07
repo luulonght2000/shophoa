@@ -48,17 +48,19 @@
                     <div class="checkout__input__checkbox col-lg-4 col-md-4">
                         <label for="ATM">
                             Thanh toán qua ATM
-                            <input id="ATM" name="payment_option" value="Bằng ATM" type="checkbox">
+                            <input id="ATM" name="payment_option" value="Bằng ATM" type="radio">
                             <span class="checkmark"></span>
                         </label>
                     </div>
                     <div class="checkout__input__checkbox col-lg-4 col-md-4">
                       <label for="payment">
                           Thanh toán khi nhận hàng
-                          <input id="payment" name="payment_option" value="Thanh toán khi nhận hàng" type="checkbox">
+                          <input id="payment" name="payment_option" value="Thanh toán khi nhận hàng" type="radio">
                           <span class="checkmark"></span>
                       </label>
                     </div>
+
+                    <span class="error-message" style="color: red">{{ $errors->first('payment_option') }}</span>
                     <button type="submit" name="send_order_place" class="site-btn">Đặt hàng</button>
                   </div>
                 </form>

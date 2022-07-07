@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\OrderPlaceRequest;
+use App\Http\Requests\UpdateClientRequest;
 use App\Models\CategoryModel;
 use App\Models\ProductModel;
 use App\Models\ShippingModel;
@@ -80,43 +82,30 @@ class ClientController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateClientRequest $request, $id)
     {
-        $rules = [
-            'name' => 'required|max:50',
-            'sex' => 'required',
-            'email' => 'required|string|email|max:255',
-            'avatar' => 'mimes:jpeg, bmp, png, gif, jpg'
-        ];
+        $user = User::findOrFail($id);
 
-        $validator = Validator::make($request->all(), $rules);
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->phone = $request->phone;
+        $user->DOB = $request->DOB;
+        $user->sex = $request->sex;
+        $user->address = $request->address;
 
-        if ($validator->fails())
-            return redirect()->route('profile.edit', ['profile' => $id])->withErrors($validator)->withInput();
-        else {
+        $user->save();
 
-            $user = User::findOrFail($id);
+        $file = $request->avatar;
+        if ($file)
+            $file->move("./uploads_user/", "$id.jpg");
 
-            $user->name = $request->name;
-            $user->email = $request->email;
-            $user->phone = $request->phone;
-            $user->DOB = $request->DOB;
-            $user->sex = $request->sex;
-            $user->address = $request->address;
-
-            $user->save();
-
-            $file = $request->avatar;
-            if ($file)
-                $file->move("./uploads_user/", "$id.jpg");
-
-            return redirect()->route('profile.edit', ['profile' => $user->id])->with('success', 'Cập nhật thông tin thành công!');
-        }
+        return redirect()->route('profile.edit', ['profile' => $user->id])->with('success', 'Cập nhật thông tin thành công!');
     }
 
     public function save_cart(Request $request)
     {
         if($request->session()->has('shipping_id')){
+            session()->flash('error', 'Vui lòng thanh toán đơn hàng trước!');
             return Redirect::to('/payment');
         }else{
             $productId = $request->productid_hidden;
@@ -184,7 +173,8 @@ class ClientController extends Controller
     {
         $rules = [
             'shipping_email' => 'required|string|email|max:255',
-            'shipping_phone' => 'required|min:10|numeric'
+            'shipping_phone' => 'required|min:10|numeric',
+            'shipping_note' => 'required'
         ];
 
         $validator = Validator::make($request->all(), $rules);
@@ -223,7 +213,7 @@ class ClientController extends Controller
         }
     }
 
-    public function order_place(Request $request)
+    public function order_place(OrderPlaceRequest $request)
     {
         $categories = CategoryModel::orderBy('id', 'DESC')->get();
 

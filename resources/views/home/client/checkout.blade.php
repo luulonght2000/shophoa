@@ -61,8 +61,8 @@
                               </div>
                               <div class="checkout__input">
                                   <p>Order notes<span>*</span></p>
-                                  <input type="text" name="shipping_note"
-                                      placeholder="Ghi chú." value="{{old('shipping_note')}}">
+                                  <input type="text" name="shipping_note" placeholder="Ghi chú." value="{{old('shipping_note')}}">
+                                <span class="error-message" style="color: red">{{ $errors->first('shipping_note') }}</span>
                               </div>
                           </div>
                           <div class="col-lg-4 col-md-6">

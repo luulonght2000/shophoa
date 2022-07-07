@@ -53,11 +53,6 @@ class ProductController extends Controller
      */
     public function store(ProductRequest $request)
     {
-        $vaildator = Validator::make($request->all());
-
-        if ($vaildator->fails())
-            return redirect()->route('product.create')->withErrors($vaildator)->withInput();
-        else {
             $product = new ProductModel;
 
             $product->name = $request->name;
@@ -77,11 +72,9 @@ class ProductController extends Controller
             $file = $request->avatar;
 
             $file->move("./uploads/", "$id.jpg");
-
             $request->session()->put("last_product_id", $id);
 
             return redirect()->route('product.index');
-        }
     }
 
     /**
@@ -119,11 +112,6 @@ class ProductController extends Controller
      */
     public function update(ProductRequest $request, $id)
     {
-        $validator = Validator::make($request->all());
-
-        if ($validator->fails())
-            return redirect()->route('product.edit', ['product' => $id])->withErrors($validator)->withInput();
-        else {
             $product = ProductModel::findOrFail($id);
 
             $product->name = $request->name;
@@ -135,7 +123,6 @@ class ProductController extends Controller
             $product->old_price = $request->old_price;
             $product->description = $request->description;
             $product->viewed = 150;
-            $product->sold = 0;
 
             $product->save();
 
@@ -146,7 +133,6 @@ class ProductController extends Controller
             $request->session()->put("last_product_id", $id);
 
             return redirect()->route('product.index');
-        }
     }
 
     public function view_add_images(Request $request, $id){
@@ -158,10 +144,6 @@ class ProductController extends Controller
     }
 
     public function add_images(AddImagesRequest $request){
-        // $this->validate($request, [
-        //     'filename' => 'required',
-        //     'filename.*' => 'mimes:jpeg, bmp, png, gif, jpg'
-        // ]); 
         $i=1;
         $id= $request->product_id;
         if($request->hasfile('filename'))
@@ -175,7 +157,7 @@ class ProductController extends Controller
             }
         }
         $file= new ImagesProductModel();
-        // $file->filenames=json_encode($data);
+        $file->filenames=json_encode($data);
         $file->product_id=$id;
         $file->save();
         return back()->with('success', 'Your files has been successfully added');

@@ -14,7 +14,11 @@
         <div class="product__details__pic">
           <ul id="imageGallery">
             <li data-thumb="{{"/uploads/$product->id.jpg"}}" data-src="{{"/uploads/$product->id.jpg"}}">
-              <img src="{{"/uploads/$product->id.jpg"}}" alt="Không có ảnh" style="height: 600px"/>
+              @if(file_exists(public_path("./uploads/{$product->id}.jpg")))
+              <img style="height: 600px" src={{"/uploads/{$product->id}.jpg"}} alt="">
+              @else
+              <img style="height: 600px" src={{"/uploads/no_photo.png"}} alt="">
+              @endif
             </li>
             @for ($i=1; $i<4; $i++)
               <li data-thumb="{{"/files/$product->id-$i.jpg"}}" data-src="{{"/files/$product->id-$i.jpg"}}">

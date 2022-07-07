@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ImportExcelRequest;
 use App\Models\CategoryModel;
 use App\Models\ProductModel;
 use App\Models\User;
