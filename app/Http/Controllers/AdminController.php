@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AdminRequest;
 use App\Models\CategoryModel;
 use App\Models\ProductModel;
 use App\Models\User;
@@ -73,38 +74,24 @@ class AdminController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(AdminRequest $request, $id)
     {
-        $rules = [
-            'name' => 'required|max:50',
-            'sex' => 'required',
-            'email' => 'required|string|email|max:255',
-            'avatar' => 'mimes:jpeg, bmp, png, gif, jpg'
-        ];
+        $user = User::findOrFail($id);
 
-        $validator = Validator::make($request->all(), $rules);
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->phone = $request->phone;
+        $user->DOB = $request->DOB;
+        $user->sex = $request->sex;
+        $user->address = $request->address;
 
-        if ($validator->fails())
-            return redirect()->route('accountadmin.edit', ['accountadmin' => $id])->withErrors($validator)->withInput();
-        else {
+        $user->save();
 
-            $user = User::findOrFail($id);
+        $file = $request->avatar;
+        if ($file)
+            $file->move("./uploads_admin/", "$id.jpg");
 
-            $user->name = $request->name;
-            $user->email = $request->email;
-            $user->phone = $request->phone;
-            $user->DOB = $request->DOB;
-            $user->sex = $request->sex;
-            $user->address = $request->address;
-
-            $user->save();
-
-            $file = $request->avatar;
-            if ($file)
-                $file->move("./uploads_admin/", "$id.jpg");
-
-            return redirect()->route('accountadmin.index');
-        }
+        return redirect()->route('accountadmin.index');
     }
 
     /**

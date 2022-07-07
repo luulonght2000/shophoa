@@ -12,7 +12,10 @@
         "laravel/sanctum": "^2.14.1",
         "laravel/socialite": "^5.5",
         "laravel/tinker": "^2.7",
-        "laravel/ui": "^3.4"
+        "laravel/ui": "^3.4",
+        "maatwebsite/excel": "*",
+        "phpoffice/phpexcel": "^1.8",
+        "phpoffice/phpspreadsheet": "dev-NumberFormatMask-Helpers"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",

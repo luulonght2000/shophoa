@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AddImagesRequest;
+use App\Http\Requests\ProductRequest;
 use App\Models\CategoryModel;
 use App\Models\ImagesProductModel;
 use App\Models\ProductModel;
@@ -49,18 +51,9 @@ class ProductController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ProductRequest $request)
     {
-        $rules = [
-            'name' => 'required|max:50',
-            'category_id' => 'required',
-            'style_id' => 'required',
-            'price' => 'required|max:30',
-            'old_price' => 'required|max:30',
-            'avatar' => 'mimes:jpeg, bmp, png, gif, jpg'
-        ];
-
-        $vaildator = Validator::make($request->all(), $rules);
+        $vaildator = Validator::make($request->all());
 
         if ($vaildator->fails())
             return redirect()->route('product.create')->withErrors($vaildator)->withInput();
@@ -76,7 +69,7 @@ class ProductController extends Controller
             $product->old_price = $request->old_price;
             $product->description = $request->description;
             $product->viewed = 100;
-            $product->sold = 10;
+            $product->sold = 0;
 
             $product->save();
 
@@ -124,18 +117,9 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(ProductRequest $request, $id)
     {
-        $rules = [
-            'name' => 'required|max:50',
-            'category_id' => 'required',
-            'style_id' => 'required',
-            'price' => 'required|max:30',
-            'old_price' => 'required|max:30',
-            'avatar' => 'mimes:jpeg, bmp, png, gif, jpg'
-        ];
-
-        $validator = Validator::make($request->all(), $rules);
+        $validator = Validator::make($request->all());
 
         if ($validator->fails())
             return redirect()->route('product.edit', ['product' => $id])->withErrors($validator)->withInput();
@@ -151,7 +135,7 @@ class ProductController extends Controller
             $product->old_price = $request->old_price;
             $product->description = $request->description;
             $product->viewed = 150;
-            $product->sold = 15;
+            $product->sold = 0;
 
             $product->save();
 
@@ -173,11 +157,11 @@ class ProductController extends Controller
         return view('admin.product.add_images', ['product' => $product, 'images' => $images, 'product_id'=>$product_id]);
     }
 
-    public function add_images(Request $request){
-        $this->validate($request, [
-            'filename' => 'required',
-            'filename.*' => 'mimes:jpeg, bmp, png, gif, jpg'
-        ]); 
+    public function add_images(AddImagesRequest $request){
+        // $this->validate($request, [
+        //     'filename' => 'required',
+        //     'filename.*' => 'mimes:jpeg, bmp, png, gif, jpg'
+        // ]); 
         $i=1;
         $id= $request->product_id;
         if($request->hasfile('filename'))
@@ -191,7 +175,7 @@ class ProductController extends Controller
             }
         }
         $file= new ImagesProductModel();
-        $file->filenames=json_encode($data);
+        // $file->filenames=json_encode($data);
         $file->product_id=$id;
         $file->save();
         return back()->with('success', 'Your files has been successfully added');
@@ -232,5 +216,47 @@ class ProductController extends Controller
         }
 
         return redirect()->route('product.index');
+    }
+
+
+
+    //=================================API PRODUCT=====================
+    public function api_product_detail($id){
+        $product = ProductModel::findOrFail($id);
+        return response()->json([$product, 'OK']);
+    }
+
+    public function api_product_create(Request $request){
+        $product = new ProductModel;
+
+            $product->name = $request->name;
+            $product->category_id = $request->category_id;
+            $product->style_id = $request->style_id;
+            $product->size = $request->size;
+            $product->price = $request->price;
+            $product->old_price = $request->old_price;
+            $product->description = $request->description;
+            $product->viewed = 100;
+            $product->sold = 0;
+
+            $product->save();
+
+            return response()->json($product);
+    }
+
+    public function api_product_update(Request $request, $id){
+        $product = ProductModel::findOrFail($id);
+
+        $product->product_status = $request->product_status;
+        $product->update();
+
+        return response()->json($product);
+    }
+
+    public function api_product_delete($id){
+        $product = ProductModel::findOrFail($id);
+        $product->delete();
+
+        return response()->json([$product, "OK"]);
     }
 }

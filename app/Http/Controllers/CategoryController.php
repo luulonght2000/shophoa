@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CategoryRequest;
 use App\Models\CategoryModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -40,28 +41,17 @@ class CategoryController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CategoryRequest $request)
     {
-        $rules = [
-            'name' => "required|max:100|unique:category_models",
-            'feature' => "required",
-            'avatar' => 'mimes:jpeg, bmp, png, gif, jpg'
-        ];
+        // $category = new CategoryModel;
+        // $category->name = $request->name;
+        // $category->feature = $request->feature;
+        // $category->description = $request->description;
 
-        $validator = Validator::make($request->all(), $rules);
+        // $category->save();
+        CategoryModel::query()->create($request->all());
 
-        if ($validator->fails())
-            return redirect()->route('category.create')->withErrors($validator)->withInput();
-        else {
-            $category = new CategoryModel;
-            $category->name = $request->name;
-            $category->feature = $request->feature;
-            $category->description = $request->description;
-
-            $category->save();
-
-            return redirect()->route('category.index');
-        }
+        return redirect()->route('category.index');
     }
 
     /**
@@ -94,27 +84,16 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(CategoryRequest $request, $id)
     {
-        $rules = [
-            'name' => 'required|max:30',
-            'feature' => "required",
-        ];
+        $category = CategoryModel::find($id);
+        $category->name = $request->name;
+        $category->feature = $request->feature;
+        $category->description = $request->description;
 
-        $validator = Validator::make($request->all(), $rules);
+        $category->save();
 
-        if ($validator->fails())
-            return redirect()->route('category.edit', ['category' => $id])->withErrors($validator)->withInput();
-        else {
-            $category = CategoryModel::find($id);
-            $category->name = $request->name;
-            $category->feature = $request->feature;
-            $category->description = $request->description;
-
-            $category->save();
-
-            return redirect()->route('category.index');
-        }
+        return redirect()->route('category.index');
     }
 
     /**

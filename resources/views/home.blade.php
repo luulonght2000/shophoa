@@ -5,8 +5,15 @@
 <section class="categories">
     <div class="container">
         <div class="row">
+            <div class="col-lg-12">
+                <div class="section-title">
+                    <h2>Featured Product</h2>
+                </div>
+            </div>
+        </div>
+        <div class="row">
             <div class="categories__slider owl-carousel">
-                @foreach($products as $product)
+                @foreach($productFeatureds as $product)
                     @if ($product->product_status == 0)
                     <div class="col-lg-3">
                         <div class="categories__item set-bg" >
@@ -15,7 +22,7 @@
                             @else
                             <img width="100%" height="350px" src={{"/uploads/no_photo.png"}} alt="">
                             @endif
-                            <h5><a href="#">{{$product->name}}</a></h5>
+                            <h5><a href='{{url("/productDetail/$product->id")}}'>{{$product->name}}</a></h5>
                         </div>
                     </div>
                     @endif
@@ -30,7 +37,7 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="section-title">
-                    <h2>Featured Product</h2>
+                    <h2>New Product</h2>
                 </div>
             </div>
         </div>
@@ -58,8 +65,10 @@
                                 </div>
                                 <div class="featured__item__text">
                                     <h6 style="text-transform: capitalize"><a href="/productDetail/{{$product->id}}">{{$product->name}}</a></h6>
-                                    <h5>{{$product->price}}
-                                        <p style="display: inline; color: red; text-decoration: line-through">{{$product->old_price}}</p>
+                                    <h5>{{number_format($product->price, 0, '', '.')}}đ
+                                        @if ($product->old_price != 0)
+                                        <p style="display: inline; color: red; text-decoration: line-through">{{number_format($product->old_price, 0, '', '.')}}đ</p>
+                                        @endif
                                     </h5>
                                 </div>
                             </form>

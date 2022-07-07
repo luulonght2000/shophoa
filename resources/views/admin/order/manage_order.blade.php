@@ -25,6 +25,13 @@ display: block;
       
       <div class="row">
         <div class="mb-6 col-md-12">
+          <ul class="nav nav-pills flex-column flex-md-row mb-3">
+            <li class="nav-item" style="margin-left: 10px">
+              <a class="nav-link active" href="{{url('admin/export-order')}}">Export Order</a>
+            </li>
+          </ul>
+        </div>
+        <div class="mb-6 col-md-12">
           <div class="card mb-4">
             <div class="row">
               <div  class="mb-3 col-md-6">

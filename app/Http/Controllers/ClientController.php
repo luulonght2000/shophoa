@@ -254,6 +254,10 @@ class ClientController extends Controller
             DB::table('tbl_order_details')->insert($order_d_data);
         }
 
+        //update sold_product
+        $this->update_sold();
+
+
         if ($data['payment_option'] === "Bằng ATM") {
             echo "Thanh toán bằng ATM";
         } elseif ($data['payment_option'] === "Thanh toán khi nhận hàng") {
@@ -264,6 +268,21 @@ class ClientController extends Controller
         }
 
         // return Redirect('/payment');
+    }
+
+    public function update_sold(){
+        $count = $this->count_product();
+        foreach($count as $key=>$v_count){
+            $id = $v_count->product_id;
+            $count = $v_count->SL;
+            DB::table('product_models')->where('id', $id)->update(['sold' => $count]);
+        }
+    }
+
+    public function count_product(){
+        $count = DB::table('tbl_order_details')
+        ->select('tbl_order_details.product_id',  DB::raw('sum(product_sales_quantity) as SL'))->groupBy('tbl_order_details.product_id')->get();
+        return $count;
     }
 
     public function delete_order(Request $request, $id){

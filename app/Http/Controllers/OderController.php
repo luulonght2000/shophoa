@@ -62,7 +62,7 @@ class OderController extends Controller
             ->join('users', 'users.id', '=', 'tbl_order.user_id')
             ->join('shipping_models', 'shipping_models.id', '=', 'tbl_order.shipping_id')
             ->join('tbl_payment', 'tbl_payment.payment_id', '=', 'tbl_order.payment_id')
-            ->select('users.*', 'shipping_models.*', 'tbl_payment.*')
+            ->select('users.name', 'users.phone', 'shipping_models.*', 'tbl_payment.payment_option', 'tbl_payment.payment_status', 'tbl_payment.payment_id')
             ->where('tbl_order.order_id', '=', $id)
             ->first();
 

@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ClientController;
+use App\Http\Controllers\ExcelController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\MailController;
@@ -23,10 +24,6 @@ use Illuminate\Support\Facades\Auth;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-// Route::get('/', function () {
-//     return view('welcome');
-// });
 
 Auth::routes();
 
@@ -101,6 +98,10 @@ Route::prefix('admin')->middleware('admin.login')->group(function () {
     Route::post('/add-images',           [ProductController::class, 'add_images']);
     // ->middleware('auth.admin.products');
     Route::resource('style', \App\Http\Controllers\StyleController::class);
+    Route::post('/import-product', [ExcelController::class, 'import_product']);
+    Route::get('/export-product', [ExcelController::class, 'export_product']);
+    Route::get('/export-user', [ExcelController::class, 'export_user']);
+    Route::get('/export-order', [ExcelController::class, 'export_order']);
 
     //Order
     Route::resource('order',                OderController::class);
@@ -129,9 +130,7 @@ Route::get('/accountadmin', function () {
     return view('jquery');
 });
 
-Route::get('/product', function () {
-    return view('admin.product.index');
-});
+Route::get('/test', [HomeController::class, 'count_product']);
 
 Route::get('/product/new', function () {
     return view('admin.product.new');
@@ -146,3 +145,4 @@ Route::middleware([
         return view('dashboard');
     })->name('dashboard');
 });
+

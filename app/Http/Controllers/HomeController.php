@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\CategoryModel;
 use App\Models\ProductModel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
 {
@@ -25,10 +26,11 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $products = ProductModel::orderBy('id', 'DESC')->paginate(11);
+        $products = ProductModel::orderBy('id', 'DESC')->paginate(12);
+        $productFeatureds = ProductModel::orderBy('sold', 'DESC')->limit(6)->get();
         $categories = CategoryModel::orderBy('id', 'DESC')->get();
 
-        return view('home', ['products' => $products, 'categories' => $categories]);
+        return view('home', ['products' => $products, 'productFeatureds' => $productFeatureds, 'categories' => $categories]);
     }
 
     public function productDetail($id)

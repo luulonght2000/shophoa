@@ -49,7 +49,6 @@
 </head>
 
 <body>
-
   @yield('master_content')
 
   {{-- <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script> --}}

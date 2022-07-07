@@ -58,6 +58,7 @@ display: block;
                             <th>Tên người đặt</th>
                             <th>Số điện thoại</th>
                             <th>Hình thức thanh toán</th>
+                            <th>Ngày đặt</th>
                             <th>
                               @if ($userInfo->payment_status==="Đã thanh toán")
                                 <a href="{{url('admin/unactive-order/'.$userInfo->payment_id)}}">
@@ -71,12 +72,12 @@ display: block;
                             </th>
                           </tr>
                         </thead>
-                  
                         
                         <tr>
                           <td>{{$userInfo->name}}</td>
                           <td>{{$userInfo->phone}}</td>
                           <td>{{$userInfo->payment_option}}</td>
+                          <td>{{date('d-m-Y', strtotime($userInfo->created_at))}}</td>
                           <td>{{$userInfo->payment_status}}</td>
                         </tr>
                         
@@ -145,7 +146,7 @@ display: block;
                     </form>
                     @else
                     <div style="float: right;">
-                      <button class="btn btn-success" style="width: 100%" name="shipping">Đơn hàng đã hàng thành. Kiểm tra thanh toán!</button>
+                      <button class="btn btn-success" style="width: 100%" name="shipping">Đơn hàng đã hoàn thành. Kiểm tra thanh toán!</button>
                     </div>
                     @endif
                   </div>

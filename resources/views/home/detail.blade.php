@@ -26,19 +26,19 @@
       </div>
       <div class="col-lg-6 col-md-6">
         <div class="product__details__text">
-          <h3>{{$product->name}}</h3>
+          <h3 style="font-family: 'Noto Serif', serif;">{{$product->name}}</h3>
           <div class="product__details__rating">
             <i class="fa fa-star"></i>
             <i class="fa fa-star"></i>
             <i class="fa fa-star"></i>
             <i class="fa fa-star"></i>
             <i class="fa fa-star-half-o"></i>
-            <span>({{$product->viewed}})</span>
+            <span>Đã bán: ({{$product->sold}})</span>
           </div>
           <form action="{{'/save-cart'}}" method="POST">
             @csrf
-            <div class="product__details__price">Giá bán: {{$product->price}}đ
-              <p style="display: inline; text-decoration: line-through">{{$product->old_price}}đ</p>
+            <div class="product__details__price">Giá bán: {{number_format($product->price, 0, '', '.')}}đ
+              <p style="display: inline; text-decoration: line-through">{{number_format($product->old_price, 0, '', '.')}}đ</p>
             </div>
             <p>{{$product->description}}</p>
             <div class=" product__details__quantity">

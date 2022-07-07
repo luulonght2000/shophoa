@@ -12,6 +12,8 @@ class CategoryModel extends Model
     protected $primaryKey = 'id';
     protected $table = 'category_models';
 
+    protected $fillable = ['name', 'feature', 'description'];
+
     public function product()
     {
         return $this->hasMany(\App\Models\ProductModel::class);

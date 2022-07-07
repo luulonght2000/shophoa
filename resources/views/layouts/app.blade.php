@@ -230,6 +230,18 @@
                 </div>
                 <div class="hero__item set-bg" style="padding: 0px;">
                     <img src="/img/hero/banner_shop.png" style="margin: 0px; height: 100%; border-radius: 20px;" alt="">
+                    <style>
+                        canvas {
+                            cursor: crosshair;
+                            display: block;
+                            position:absolute;
+                            z-index:10;
+                            top:5;
+                            width:100% !important;
+                        }
+                      </style>
+                      <canvas id="canvas">Canvas is not supported in your browser.</canvas>
+                      <script type="text/javascript" src="https://wpshare247.com/ajquery.lib/fireworks/script.js"> </script>
                 </div>
             </div>
         </div>

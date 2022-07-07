@@ -18,6 +18,9 @@
             <li class="nav-item">
               <a class="nav-link active" href="{{url('admin/user/create')}}">Add User</a>
             </li>
+            <li class="nav-item" style="margin-left: 10px">
+              <a class="nav-link active" href="{{url('admin/export-user')}}">Export User</a>
+            </li>
           </ul>
           <div class="card mb-4">
             <div class="row">
