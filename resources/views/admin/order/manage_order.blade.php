@@ -33,18 +33,34 @@ display: block;
         </div>
         <div class="mb-6 col-md-12">
           <div class="card mb-4">
+            <div  class="mb-6 col-md-12">
+              <h5 class="card-header">Quản lý đơn hàng</h5>
+            </div>
             <div class="row">
-              <div  class="mb-3 col-md-6">
-                <h5 class="card-header">Quản lý đơn hàng</h5>
-              </div>
-
-              <div  class="mb-3 col-md-6">
+              <div  class="mb-3 col-md-6"> 
                 <form action="" class="form-inline">
                   <div class="input-group" style="padding: 20px">
-                      <input type="search" class="form-control rounded" name="key" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
+                    <select class="form-select" name="payment_key" aria-label="Default select example">
+                      <option value="">Tất cả</option>
+                      <option value="Đã thanh toán">Đã thanh toán</option>
+                      <option value="Đang chờ xử lý">Đang chờ xử lý</option>
+                    </select>
+                    <button type="submit" class="btn btn-outline-primary">search</button>
+                  </div>
+                </form>
+              </div>
+              <div  class="mb-3 col-md-6">                
+                <form action="" class="form-inline">
+                  <div class="input-group" style="padding: 20px">
+                    <select class="form-select" name="key" aria-label="Default select example">
+                      <option value="">Tất cả</option>
+                      <option value="Giao hàng thành công">Giao hàng thành công</option>
+                      <option value="Đang giao hàng">Đang giao hàng</option>
+                      <option value="Đang chờ xử lý">Đang chờ xử lý</option>
+                    </select>
                       <button type="submit" class="btn btn-outline-primary">search</button>
                   </div>
-              </form>
+                </form>
               </div>
             </div>
             
@@ -56,6 +72,11 @@ display: block;
                 <div class="alert fade alert-simple alert-success font__family-montserrat font__size-16 font__weight-light brk-library-rendered rendered show">
                   <p>{{session('success')}}</p>
                 </div>
+              </div>
+              @endif
+              @if(session('error'))
+              <div class="alert alert-warning">
+                  {{session('error')}}
               </div>
               @endif
                 <div class="row">

@@ -15,7 +15,7 @@
       content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
     />
 
-    <title>Dashboard - Analytics | Sneat - Bootstrap 5 HTML Admin Template - Pro</title>
+    <title>Dashboard - Shophoa | Admin</title>
 
     <meta name="description" content="" />
 
@@ -73,7 +73,7 @@
 
       <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
         <div class="app-brand demo">
-          <a href="{{url('/templateadmin')}}" class="app-brand-link">
+          <a href="{{route('admin.index')}}" class="app-brand-link">
             <span class="app-brand-logo demo">
               <svg
                 width="25"
@@ -205,11 +205,13 @@
               <div data-i18n="Misc">SHOP</div>
             </a>
             <ul class="menu-sub">
+              @if (Auth::user()->is_admin == 1)
               <li class="menu-item">
                 <a href="{{url('admin/user')}}" class="menu-link">
                   <div data-i18n="User">Users</div>
                 </a>
               </li>
+              @endif
               <li class="menu-item">
                 <a href="{{url('admin/manage-order')}}" class="menu-link">
                   <div data-i18n="Style">Order</div>

@@ -51,7 +51,7 @@ class ExcelController extends Controller
             $error_code = $e->errorInfo[1];
             return back()->withErrors('Đã xảy ra sự cố khi tải lên!');
         }
-        return back()->withSuccess('Great! Successfully uploaded.');
+        return back()->with('success_import', 'Great! Successfully uploaded.');
     }
 
     public function ExportExcel($data)

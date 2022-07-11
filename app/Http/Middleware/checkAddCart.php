@@ -17,7 +17,7 @@ class checkAddCart
      */
     public function handle(Request $request, Closure $next)
     {
-        if (Auth::check()) {
+        if (Auth::check() || session()->get('id')) {
             return $next($request);
         }
         return redirect()->route('admin.auth.login')->with('error', 'Vui lòng đăng nhập');

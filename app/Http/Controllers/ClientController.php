@@ -220,12 +220,20 @@ class ClientController extends Controller
         //insert payment_method
         $data = array();
         $data['payment_option'] = $request->payment_option;
+<<<<<<< HEAD
         $data['payment_status'] = $request->payment_option === 'Thanh toán khi nhận hàng' ? 'Đang chờ xử lý' : 'Đã thanh toán';
+=======
+        $data['payment_status'] = $request->payment_status === 'Thanh toán khi nhận hàng' ? 'Đang chờ xử lý' : 'Đã thanh toán';
+>>>>>>> 2674941fe28c74cf6b53c4ddbafdf3d0318b1a95
         $payment_id = DB::table('tbl_payment')->insertGetId($data);
 
         //insert order
         $order_data = array();
-        $order_data['user_id'] = Auth::id();
+        if(Auth::check()){
+            $order_data['user_id'] = Auth::id();
+        }elseif(session()->get('id')){
+            $order_data['user_id'] = session()->get('id');
+        }
         $order_data['shipping_id'] = $request->session()->get("shipping_id", 0);
         $order_data['payment_id'] = $payment_id;
         $order_data['order_total'] = Cart::subtotal();
@@ -250,9 +258,12 @@ class ClientController extends Controller
 
         if ($data['payment_option'] === "Bằng ATM") {
             return Redirect::to('/payment-atm');
+<<<<<<< HEAD
             session()->flash('success', 'Mua hàng thành công! Chúng tôi sẽ liên hệ bạn sớm nhất. Cảm ơn quý khách!');
             Cart::destroy();
             $request->session()->forget('shipping_id');
+=======
+>>>>>>> 2674941fe28c74cf6b53c4ddbafdf3d0318b1a95
         } elseif ($data['payment_option'] === "Thanh toán khi nhận hàng") {
             session()->flash('success', 'Mua hàng thành công! Chúng tôi sẽ liên hệ bạn sớm nhất. Cảm ơn quý khách!');
             Cart::destroy();
@@ -266,7 +277,11 @@ class ClientController extends Controller
     public function checkout_atm()
     {
         $vnp_Url = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
+<<<<<<< HEAD
         $vnp_Returnurl = "http://127.0.0.1:8000/checkout";
+=======
+        $vnp_Returnurl = "https://kaopiz-shophoa.com/checkout";
+>>>>>>> 2674941fe28c74cf6b53c4ddbafdf3d0318b1a95
         $vnp_TmnCode = "WVZVD7UH";//Mã website tại VNPAY 
         $vnp_HashSecret = "YAPPWUGUNVNRGADJEPHWYKIIPBVHCMYV"; //Chuỗi bí mật
 
@@ -324,7 +339,11 @@ class ClientController extends Controller
         $returnData = array('code' => '00'
             , 'message' => 'success'
             , 'data' => $vnp_Url);
+<<<<<<< HEAD
             if (isset($_POST['payment_atm'])) {
+=======
+            if (isset($_POST['send_order_place'])) {
+>>>>>>> 2674941fe28c74cf6b53c4ddbafdf3d0318b1a95
                 header('Location: ' . $vnp_Url);
                 die();
             } else {

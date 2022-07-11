@@ -52,6 +52,10 @@ Route::prefix('/')->middleware('checkAddCart')->group(function () {
     Route::get('/payment',                  [ClientController::class, 'payment']);
     Route::post('/order-place',             [ClientController::class, 'order_place']);
     Route::delete('/delete-order/{shipping_id}',  [ClientController::class, 'delete_order']);
+<<<<<<< HEAD
+=======
+    Route::post('/checkout-atm',                [ClientController::class, 'checkout_atm']);
+>>>>>>> 2674941fe28c74cf6b53c4ddbafdf3d0318b1a95
     Route::post('/payment-atm',                [ClientController::class, 'checkout_atm']);
 });
 
@@ -105,7 +109,8 @@ Route::prefix('admin')->middleware('admin.login')->group(function () {
     Route::get('/export-order', [ExcelController::class, 'export_order']);
 
     //Order
-    Route::resource('order',                OderController::class);
+    Route::resource('order',                OderController::class)->except(['destroy']);
+    Route::resource('order',                OderController::class)->only(['destroy'])->middleware('checkPermission');
     Route::get('manage-order',              [OderController::class, 'manage_order']);
     Route::put('/order_status/{order_id}',  [OderController::class, 'order_status']);
     Route::get('/unactive-order/{id}', [OderController::class, 'unactive']);
@@ -122,28 +127,4 @@ Route::prefix('admin')->middleware('admin.login')->group(function () {
 
 
 //=======================================TEST================================================
-
-Route::get('/templateadmin', function () {
-    return view('admin.app');
-});
-
-Route::get('/accountadmin', function () {
-    return view('jquery');
-});
-
-Route::get('/test', [HomeController::class, 'count_product']);
-
-Route::get('/product/new', function () {
-    return view('admin.product.new');
-});
-
-Route::middleware([
-    'auth:sanctum',
-    config('jetstream.auth_session'),
-    'verified'
-])->group(function () {
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
-});
 

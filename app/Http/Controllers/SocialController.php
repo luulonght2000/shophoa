@@ -24,6 +24,7 @@ class SocialController extends Controller
         if ($authUser) {
             $account_name = User::where('id', $authUser->user)->first();
             session()->put('name', $account_name->name);
+            session()->put('email', $account_name->email);
             session()->put('id', $account_name->id);
             
         }

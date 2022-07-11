@@ -40,7 +40,7 @@ return [
     'google' => [
         'client_id' => '699283675625-q2mbi8n26efnlgntkh7oblc50lou9ck0.apps.googleusercontent.com',
         'client_secret' => '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',
-        'redirect' => 'http://localhost:8000/google/callbackGG',
+        'redirect' => 'https://kaopiz-shophoa.com/google/callbackGG',
     ],
 
 

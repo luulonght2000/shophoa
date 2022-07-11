@@ -14,19 +14,16 @@
             <li class="nav-item">
               <a class="nav-link active" href="javascript:void(0);"><i class="bx bx-user me-1"></i> Account</a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{{url('/product/new')}}"
-                ><i class="bx bx-bell me-1"></i> Notifications</a
-              >
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="pages-account-settings-connections.html"
-                ><i class="bx bx-link-alt me-1"></i> Connections</a
-              >
-            </li>
           </ul>
           <div class="card mb-4">
             <h5 class="card-header">Profile Details</h5>
+              @if(session('success'))
+              <div class="mb-6 col-md-12" style="padding: 0px 20px">
+                <div class="alert fade alert-simple alert-success font__family-montserrat font__size-16 font__weight-light brk-library-rendered rendered show">
+                  <p>{{session('success')}}</p>
+                </div>
+              </div>
+              @endif
             <!-- Account -->
             <hr class="my-0" />
             <div class="card-body">

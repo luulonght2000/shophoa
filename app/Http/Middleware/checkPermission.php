@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class CheckLoginAdmin
+class checkPermission
 {
     /**
      * Handle an incoming request.
@@ -17,14 +17,12 @@ class CheckLoginAdmin
      */
     public function handle(Request $request, Closure $next)
     {
-        if (Auth::check()) {
-            if (Auth::user()->is_admin == 1 || Auth::user()->is_admin == 2) {
-                return $next($request);
-            } else if (Auth::user()->is_admin == 0) {
-                return redirect()->route('welcome');
+        if(Auth::check()){
+            if(Auth::user()->is_admin == 1){
+                return $next($request)->with('success', 'Xóa đơn hàng thành công!');
+            }else{
+                return redirect()->back()->with('error', 'Tài khoản của bạn không được phép xóa đơn hàng!');
             }
-            return redirect()->route('admin.auth.login')->with('error', 'Tài khoản không đúng');
         }
-        return redirect()->route('admin.auth.login')->with('error', 'Vui lòng đăng nhập');
     }
 }

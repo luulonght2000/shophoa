@@ -6,6 +6,7 @@ use App\Http\Requests\AdminRequest;
 use App\Models\CategoryModel;
 use App\Models\ProductModel;
 use App\Models\User;
+use GrahamCampbell\ResultType\Success;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -91,7 +92,7 @@ class AdminController extends Controller
         if ($file)
             $file->move("./uploads_admin/", "$id.jpg");
 
-        return redirect()->route('accountadmin.index');
+        return redirect()->back()->with('success', 'Cập nhật thông tin thành công!');
     }
 
     /**

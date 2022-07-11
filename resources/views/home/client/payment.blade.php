@@ -42,6 +42,7 @@
                 
                 <form action="{{url('/order-place')}}" method="POST">
                   @csrf
+<<<<<<< HEAD
                   <input hidden id="payment" name="payment_option" value="Thanh toán khi nhận hàng">
                   <button type="submit" name="send_order_place" class="site-btn">Thanh toán khi nhận hàng</button>
                 </form>
@@ -49,6 +50,29 @@
                   @csrf
                   <input hidden id="ATM" name="payment_option" value="Bằng ATM">
                   <button type="submit" name="payment_atm" class="site-btn">ATM</button>
+=======
+                  <div class="row">
+                    <div class="col-lg-4 col-md-4">
+                      <h5 style="color: red">Hình thức thanh toán</h4>
+                    </div>
+                    <div class="checkout__input__checkbox col-lg-4 col-md-4">
+                        <label for="ATM">
+                            Thanh toán qua ATM
+                            <input id="ATM" name="payment_option" value="Bằng ATM" type="radio">
+                            <span class="checkmark"></span>
+                        </label>
+                    </div>
+                    <div class="checkout__input__checkbox col-lg-4 col-md-4">
+                      <label for="payment">
+                          Thanh toán khi nhận hàng
+                          <input id="payment" name="payment_option" value="Thanh toán khi nhận hàng" type="radio">
+                          <span class="checkmark"></span>
+                      </label>
+                    </div>
+                    <span class="error-message" style="color: red">{{ $errors->first('payment_option') }}</span>
+                    <button type="submit" name="send_order_place" class="site-btn">Đặt hàng</button>
+                  </div>
+>>>>>>> 2674941fe28c74cf6b53c4ddbafdf3d0318b1a95
                 </form>
                 <form action='{{url("delete-order/$shipping_id")}}' method="POST" onsubmit="return(confirm('bạn có thực sự muốn hủy đơn hàng này?'))">
                     @method('DELETE')
