@@ -31,7 +31,7 @@ display: block;
                       <h4 class="card-title">Import Excel Data Product</h4>
                   </div>
                   <div class="card-body">
-                   @if ($message = Session::get('success'))
+                   @if ($message = Session::get('success_import'))
                    <div class="alert alert-success alert-block">
                      <strong>{{ $message }}</strong>
                    </div>

@@ -59,7 +59,6 @@
                           <span class="checkmark"></span>
                       </label>
                     </div>
-
                     <span class="error-message" style="color: red">{{ $errors->first('payment_option') }}</span>
                     <button type="submit" name="send_order_place" class="site-btn">Đặt hàng</button>
                   </div>

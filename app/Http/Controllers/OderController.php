@@ -113,6 +113,20 @@ class OderController extends Controller
             ->join('tbl_payment', 'tbl_payment.payment_id', '=', 'tbl_order.payment_id')
             ->select('tbl_order.*', 'users.name', 'tbl_payment.payment_status')
             ->orderby('tbl_order.order_id', 'desc')->paginate(5);
+        if ($key = request()->key) {
+            $all_order = DB::table('tbl_order')->join('users', 'tbl_order.user_id', '=', 'users.id')
+            ->join('tbl_payment', 'tbl_payment.payment_id', '=', 'tbl_order.payment_id')
+            ->select('tbl_order.*', 'users.name', 'tbl_payment.payment_status')
+            ->orderby('tbl_order.order_id', 'desc')
+            ->where('tbl_order.order_status', 'like', '%' . $key . '%')->paginate(5);
+        }elseif($payment_key = request()->payment_key){
+            $all_order = DB::table('tbl_order')->join('users', 'tbl_order.user_id', '=', 'users.id')
+            ->join('tbl_payment', 'tbl_payment.payment_id', '=', 'tbl_order.payment_id')
+            ->select('tbl_order.*', 'users.name', 'tbl_payment.payment_status')
+            ->orderby('tbl_order.order_id', 'desc')
+            ->where('tbl_payment.payment_status', 'like', '%' . $payment_key . '%')->paginate(5);
+        }
+
         return view('admin.order.manage_order', ['all_order' => $all_order]);
     }
 
@@ -124,7 +138,8 @@ class OderController extends Controller
      */
     public function destroy($id)
     {
-        $order_id = DB::table('tbl_order')->where('order_id', $id)->delete();
+        DB::table('tbl_order')->where('order_id', $id)->delete();
+
         return Redirect::to('/admin/manage-order');
     }
 }

@@ -105,9 +105,10 @@
                                     color: black;
                                 }
                             </style>
+                            @if (Auth::check())
                             <div class="auth">
                                 @if(Auth::check())
-                                    @if (Auth::user()->is_admin==1)
+                                    @if (Auth::user()->is_admin == 1 || Auth::user()->is_admin == 2)
                                     Xin chào: <a href="{{url('admin/home')}}">{{Auth::user()->email}}</a>
                                     @else
                                     Xin chào:  <a href="{{route('profile.edit', ['profile'=>Auth::user()->id])}}">{{Auth::user()->email}}</a>
@@ -116,8 +117,18 @@
                                 <a href="/login"><i class="fa fa-user"></i> LogIn</a>
                                 @endif
                             </div>
+                            @else
+                            <div class="auth">
+                                @if (session()->get('id'))
+                                Xin chào:  <a href="{{route('profile.edit', ['profile'=>session()->get('id')])}}">{{session()->get('name')}}</a>
+                                @else
+                                <a href="/login"><i class="fa fa-user"></i> LogIn</a>
+                                @endif
+                            </div>
+                            @endif
                         </div>
                         <div class="header__top__right__language">
+                            @if (Auth::check())
                             <div class="auth">
                                 @if(Auth::check())
                                 <a href="{{route('logout')}}"><i class="fa fa-user"></i> LogOut</a>
@@ -125,6 +136,15 @@
                                 <a href="/register"><i class="fa fa-user"></i> Register</a>
                                 @endif
                             </div>
+                            @else
+                            <div class="auth">
+                                @if(session()->get('id'))
+                                <a href="{{route('logout')}}"><i class="fa fa-user"></i> LogOut</a>
+                                @else
+                                <a href="/register"><i class="fa fa-user"></i> Register</a>
+                                @endif
+                            </div>
+                            @endif
                         </div>
                     </div>
                 </div>

@@ -30,18 +30,18 @@
                 </div>
             </div>
             <div class="checkout__form">
-                <h4>Billing Details</h4>
-                <form action="{{url('/save-checkout-user')}}" method="post">
+                <h4>Delivery Address</h4>
+                <form action="{{url('/save-checkout-user')}}" method="post" enctype="multipart/form-data">
                     @csrf
                         <div class="row">
                           <div class="col-lg-8 col-md-6">
                               <div class="checkout__input">
                                   <p>Full Name<span>*</span></p>
-                                  <input type="text" name="shipping_name" placeholder="" value="{{Auth::user()->name}}">
+                                  <input type="text" name="shipping_name" placeholder="" >
                               </div>
                               <div class="checkout__input">
                                   <p>Address<span>*</span></p>
-                                  <input type="text" value="{{Auth::user()->address}}" name="shipping_address" class="checkout__input__add" value="{{old('shipping_address')}}" required>
+                                  <input type="text"  name="shipping_address" class="checkout__input__add" value="{{old('shipping_address')}}" required>
                               </div>
                               <div class="row">
                                   <div class="col-lg-6">
@@ -54,7 +54,7 @@
                                   <div class="col-lg-6">
                                       <div class="checkout__input">
                                           <p>Email<span>*</span></p>
-                                          <input type="text" name="shipping_email" placeholder="{{Auth::user()->email}}">
+                                          <input type="text" name="shipping_email" >
                                           <span class="error-message" style="color: red">{{ $errors->first('shipping_email') }}</span>
                                       </div>
                                   </div>
