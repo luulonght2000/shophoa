@@ -52,6 +52,7 @@ Route::prefix('/')->middleware('checkAddCart')->group(function () {
     Route::get('/payment',                  [ClientController::class, 'payment']);
     Route::post('/order-place',             [ClientController::class, 'order_place']);
     Route::delete('/delete-order/{shipping_id}',  [ClientController::class, 'delete_order']);
+    Route::post('/payment-atm',                [ClientController::class, 'checkout_atm']);
 });
 
 
