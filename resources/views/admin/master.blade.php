@@ -10,6 +10,7 @@
 >
   <head>
     <meta charset="utf-8" />
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
@@ -61,6 +62,12 @@
 
   <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
   <link href="{{asset('fontawesome/css/all.css')}}" rel="stylesheet">
+
+  {{-- Datatable --}}
+  <link rel="stylesheet" href="//cdn.datatables.net/1.10.7/css/jquery.dataTables.min.css">
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.16/datatables.min.css"/>
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+  <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.16/datatables.min.js"></script>
   
   </head>
 
@@ -211,6 +218,12 @@
                   <div data-i18n="User">Users</div>
                 </a>
               </li>
+
+              <li class="menu-item">
+                <a href="{{url('admin/role')}}" class="menu-link">
+                  <div data-i18n="Roles">Roles</div>
+                </a>
+              </li>
               @endif
               <li class="menu-item">
                 <a href="{{url('admin/manage-order')}}" class="menu-link">
@@ -289,9 +302,9 @@
                 <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
                   <div class="avatar avatar-online">
                     @if(Auth::check())
-                    <img class="auto rounded-circle" src="/uploads_admin/{{Auth::user()->id}}.jpg"alt="">
+                    <img class="auto rounded-circle" src="/uploads_user/{{Auth::user()->id}}.jpg"alt="">
                     @else
-                    <img class="auto rounded-circle" src={{"/uploads_admin/no_photo.jpg"}} alt="">
+                    <img class="auto rounded-circle" src="/uploads_user/no_photo.jpg" alt="">
                   @endif
                   </div>
                 </a>
@@ -302,9 +315,9 @@
                         <div class="flex-shrink-0 me-3">
                           <div class="avatar avatar-online">
                             @if(Auth::check())
-                              <img class="auto rounded-circle" src="/uploads_admin/{{Auth::user()->id}}.jpg"alt="">
+                              <img class="auto rounded-circle" src="/uploads_user/{{Auth::user()->id}}.jpg"alt="">
                               @else
-                              <img class="auto rounded-circle" src={{"/uploads_admin/no_photo.jpg"}} alt="">
+                              <img class="auto rounded-circle" src="/uploads_user/no_photo.jpg" alt="">
                             @endif
                           </div>
                         </div>
@@ -431,7 +444,16 @@
     <!-- Page JS -->
 	<script src="{{asset('Admin_2/js/dashboards-analytics.js')}}"></script>
 
-    <!-- Place this tag in your head or just before your close body tag. -->
-    <script async defer src="https://buttons.github.io/buttons.js"></script>
-  </body>
+  <!-- Place this tag in your head or just before your close body tag. -->
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+  <!-- jQuery -->
+  <script src="//code.jquery.com/jquery.js"></script>
+  <!-- DataTables -->
+  <script src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script>
+  <!-- Bootstrap JavaScript -->
+  <script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+  <!-- App scripts -->
+  @stack('scripts')
+</body>
 </html>

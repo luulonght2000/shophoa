@@ -34,13 +34,13 @@ return [
     'facebook' => [
         'client_id' => '389360993093111',
         'client_secret' => 'e8258dc6f5294434c14657b2d96d3c6a',
-        'redirect' => 'http://127.0.0.1:8000/facebook/callback',
+        'redirect' => 'http://localhost:8000/facebook/callbackFB',
     ],
 
     'google' => [
         'client_id' => '699283675625-q2mbi8n26efnlgntkh7oblc50lou9ck0.apps.googleusercontent.com',
         'client_secret' => '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',
-        'redirect' => 'https://kaopiz-shophoa.com/google/callbackGG',
+        'redirect' => 'http://localhost:8000/google/callbackGG',
     ],
 
 
