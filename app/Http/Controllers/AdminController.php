@@ -90,7 +90,7 @@ class AdminController extends Controller
 
         $file = $request->avatar;
         if ($file)
-            $file->move("./uploads_admin/", "$id.jpg");
+            $file->move("./uploads_user/", "$id.jpg");
 
         return redirect()->back()->with('success', 'Cập nhật thông tin thành công!');
     }

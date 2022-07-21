@@ -20,7 +20,7 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string("phone", 30)->nullable(true);
-            $table->dateTime('DOB')->default('2000-01-01 0:0:0'); //Ngày sinh
+            $table->dateTime('DOB')->format('Y-m-d'); //Ngày sinh
             $table->boolean('sex')->default(true); //Giới tính
             $table->string('address', 100)->nullable(true); //Đại chỉ
             $table->boolean('is_admin')->default(false);

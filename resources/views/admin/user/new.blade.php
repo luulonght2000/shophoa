@@ -82,6 +82,8 @@
                       <input type="radio" class="form-check-input" id="sex" placeholder="Giới tính" name="sex" value="1" {{old('sex')?"checked":""}}">Nam
 
                       <input type="radio" class="form-check-input" id="sex" placeholder="Giới tính" name="sex" value="0" {{old('sex')?"":"checked"}}">NỮ
+                      <br>
+                      <span style="color: red" class="error-message">{{ $errors->first('sex') }}</span>
                     </div>
                   </div>
   

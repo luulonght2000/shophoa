@@ -9,13 +9,15 @@
         "bumbummen99/shoppingcart": "^4.2",
         "guzzlehttp/guzzle": "^7.2",
         "laravel/framework": "^9.11",
+        "laravel/passport": "^10.4",
         "laravel/sanctum": "^2.14.1",
         "laravel/socialite": "^5.5",
         "laravel/tinker": "^2.7",
         "laravel/ui": "^3.4",
         "maatwebsite/excel": "*",
         "phpoffice/phpexcel": "^1.8",
-        "phpoffice/phpspreadsheet": "dev-NumberFormatMask-Helpers"
+        "phpoffice/phpspreadsheet": "dev-NumberFormatMask-Helpers",
+        "yajra/laravel-datatables-oracle": "^10.1"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",

@@ -9,6 +9,8 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\MailController;
 use App\Http\Controllers\OderController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\RoleController;
+use App\Http\Controllers\DatatablesController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SocialController;
 use App\Http\Controllers\UserController;
@@ -53,13 +55,12 @@ Route::prefix('/')->middleware('checkAddCart')->group(function () {
     Route::post('/order-place',             [ClientController::class, 'order_place']);
     Route::delete('/delete-order/{shipping_id}',  [ClientController::class, 'delete_order']);
     Route::post('/checkout-atm',                [ClientController::class, 'checkout_atm']);
-    Route::post('/payment-atm',                [ClientController::class, 'checkout_atm']);
 });
 
 
 //================================LOGIN======================================================
 Route::prefix('/')->group(function () {
-    Route::get('login',     [LoginController::class, 'login'])->name('admin.auth.login');
+    Route::get('login',     [LoginController::class, 'login'])->name('admin.auth.login')->middleware('checkGetLogin');
     Route::post('login',    [LoginController::class, 'checkLogin'])->name('admin.auth.check-login');
 
     Route::get('/quen-mat-khau',    [MailController::class, 'forgotPass']);
@@ -70,14 +71,17 @@ Route::prefix('/')->group(function () {
 
 
 //--------------------------Login Facebook--------------------------------
-Route::controller(SocialController::class)->group(function () {
-    Route::get('facebook', 'redirectToFacebook')->name('auth.facebook');
-    Route::any('facebook/callback', 'handleFacebookCallback');
-});
+// Route::controller(SocialController::class)->group(function () {
+//     Route::get('facebook', 'redirectToFacebook')->name('auth.facebook');
+//     Route::any('facebook/callback', 'callback_facebook');
+// });
+
+Route::get('/facebook',      [SocialController::class, 'redirectToFacebook'])->name('auth.facebook')->middleware('checkGetLogin');;
+Route::get('/facebook/callbackFB', [SocialController::class, 'callback_facebook']);
 
 //---------------------------Login google-----------------------------
 
-Route::get('/login-google',      [SocialController::class, 'login_google']);
+Route::get('/login-google',      [SocialController::class, 'login_google'])->middleware('checkGetLogin');;
 Route::get('/google/callbackGG', [SocialController::class, 'callback_google']);
 
 
@@ -87,7 +91,10 @@ Route::prefix('admin')->middleware('admin.login')->group(function () {
     Route::get('logout', [LoginController::class, 'logout']);
 
     Route::get('/home', 'App\Http\Controllers\AdminController@index')->name('admin.index');
-    Route::resource('user',         UserController::class);
+    Route::resource('user',         UserController::class)->middleware('checkRole');
+    Route::get('get-user',          [UserController::class, 'index'])->name('ajax.user.index')->middleware('checkRole');
+    Route::post('delete-user',      [UserController::class, 'destroy']);
+    Route::resource('role',         RoleController::class)->middleware('checkRole');
     Route::resource('accountadmin', AdminController::class);
     Route::resource('category',     CategoryController::class);
 
@@ -100,18 +107,18 @@ Route::prefix('admin')->middleware('admin.login')->group(function () {
     Route::post('/add-images',           [ProductController::class, 'add_images']);
     // ->middleware('auth.admin.products');
     Route::resource('style', \App\Http\Controllers\StyleController::class);
-    Route::post('/import-product', [ExcelController::class, 'import_product']);
-    Route::get('/export-product', [ExcelController::class, 'export_product']);
-    Route::get('/export-user', [ExcelController::class, 'export_user']);
-    Route::get('/export-order', [ExcelController::class, 'export_order']);
+    Route::post('/import-product',  [ExcelController::class, 'import_product']);
+    Route::get('/export-product',   [ExcelController::class, 'export_product']);
+    Route::get('/export-user',      [ExcelController::class, 'export_user']);
+    Route::get('/export-order',     [ExcelController::class, 'export_order']);
 
     //Order
     Route::resource('order',                OderController::class)->except(['destroy']);
     Route::resource('order',                OderController::class)->only(['destroy'])->middleware('checkPermission');
     Route::get('manage-order',              [OderController::class, 'manage_order']);
     Route::put('/order_status/{order_id}',  [OderController::class, 'order_status']);
-    Route::get('/unactive-order/{id}', [OderController::class, 'unactive']);
-    Route::get('/active-order/{id}',   [OderController::class, 'active']);
+    Route::get('/unactive-order/{id}',      [OderController::class, 'unactive']);
+    Route::get('/active-order/{id}',        [OderController::class, 'active']);
 });
 
 
@@ -125,3 +132,16 @@ Route::prefix('admin')->middleware('admin.login')->group(function () {
 
 //=======================================TEST================================================
 
+// Route::controller('datatables', 'DatatablesController', [
+//     'anyData'  => 'datatables.data',
+//     'getIndex' => 'datatables',
+// ]);
+
+// Route::get('/datatables', [DatatablesController::class, 'getIndex']);
+// Route::get('/anyData', [DatatablesController::class, 'anyData'])->name('datatables.data');
+
+// Route::get('ajax-datatable-crud',   [DataTablesController::class, 'index']);
+// Route::post('add-update-book',      [DataTablesController::class, 'store']);
+// Route::post('edit-book',            [DataTablesController::class, 'edit']);
+// Route::post('delete-book',          [DataTablesController::class, 'destroy']);
+Route::resource('product', DataTablesController::class);

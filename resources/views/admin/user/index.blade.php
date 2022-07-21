@@ -1,6 +1,21 @@
 
 @extends('admin.master')
 @section('content')
+<style>
+  .my-custom-scrollbar {
+    position: relative;
+    height: 500px;
+    overflow: auto;
+  }
+  .table-wrapper-scroll-y {
+    display: block;
+  }
+  tfoot input {
+        width: 100%;
+        padding: 3px;
+        box-sizing: border-box;
+    }
+</style>
   <!-- Content wrapper -->
   <div class="content-wrapper">
     <!-- Content -->
@@ -11,7 +26,6 @@
           <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Shop /</span> User</h4>
         </div>
       </div>
-      
       <div class="row">
         <div class="mb-6 col-md-12">
           <ul class="nav nav-pills flex-column flex-md-row mb-3">
@@ -27,143 +41,165 @@
               <div  class="mb-3 col-md-6">
                 <h5 class="card-header">List User</h5>
               </div>
-
-              <div  class="mb-3 col-md-6">
-                <form action="" class="form-inline">
-                  <div class="input-group" style="padding: 20px">
-                      <input type="search" class="form-control rounded" name="key" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
-                      <button type="submit" class="btn btn-outline-primary">search</button>
-                  </div>
-              </form>
-              </div>
             </div>
-            
-            <!-- Account -->
-            <hr class="my-0" />
-            <div class="card-body">
-              <div class="row">
-                <div class="nav-align-top mb-4">
-                  <ul class="nav nav-pills mb-3" role="tablist">
-                    <li class="nav-item">
-                      <button
-                        type="button"
-                        class="nav-link active"
-                        role="tab"
-                        data-bs-toggle="tab"
-                        data-bs-target="#navs-pills-top-home"
-                        aria-controls="navs-pills-top-home"
-                        aria-selected="true"
-                      >
-                        User
-                      </button>
-                    </li>
-                    <li class="nav-item">
-                      <button
-                        type="button"
-                        class="nav-link"
-                        role="tab"
-                        data-bs-toggle="tab"
-                        data-bs-target="#navs-pills-top-profile"
-                        aria-controls="navs-pills-top-profile"
-                        aria-selected="false"
-                      >
-                        User Admin
-                      </button>
-                    </li>
-                  </ul>
-                  <div class="tab-content">
-                    <div class="tab-pane fade show active" id="navs-pills-top-home" role="tabpanel">
-                      <table class="table table-hover table-dark" border="1">
-                        <thead>
-                          <tr>
-                            <th>Ảnh</th>
-                            <th>FullName</th>
-                            <th>Giới tính</th>
-                            <th>Email</th>
-                            <th>Phone</th>
-                            <th>Địa chỉ</th>
-                            <th>Action</th>
-                          </tr>
-                        </thead>
-                  
-                        @foreach($users as $user)
+            <div class="row">
+              <div class="tab-content">
+                <div class="tab-pane fade show active" id="navs-pills-top-home" role="tabpanel">
+                  <div class="table-wrapper-scroll-y my-custom-scrollbar">
+                    <table id="table_user" class="table table-bordered table-striped mb-0" style="width: 150%">
+                      <thead>
                         <tr>
-                          <td>
-                            @if(file_exists(public_path("/uploads_user/{$user->id}.jpg")))
-                            <img width="100" height="100" src={{"/uploads_user/{$user->id}.jpg"}} alt="">
-                            @else
-                            <img width="100" height="100" src={{"/uploads_admin/no_photo.jpg"}} alt="">
-                            @endif
-                          </td>
-                          <td>{{$user->name}}</td>
-                          <td>{{$user->sex?"Nam":"Nữ"}}</td>
-                          <td>{{$user->email}}</td>
-                          <td>{{$user->phone}}</td>
-                          <td>{{$user->address}}</td>
-                          <td>
-                            <form action="{{route('user.destroy', ['user'=>$user->id])}}" method="POST" onsubmit="return(confirm('bạn có thực sự muốn xóa?'))">
-                              @method('DELETE')
-                              @csrf
-                              <button type="submit" class="btn btn-icon btn-outline-danger">
-                                <i class="bx bx-trash-alt"></i>
-                              </button>
-                            </form>
-                          </td>
+                          <th>Ảnh</th>
+                          <th>Role</th>
+                          <th>FullName</th>
+                          <th>Email</th>
+                          <th>Phone</th>
+                          <th>Ngày sinh</th>
+                          <th>Giới tính</th>
+                          <th>Address</th>
+                          <th>Action</th> 
                         </tr>
-                        @endforeach
-                      </table>
-                    </div>
-                    <div class="tab-pane fade" id="navs-pills-top-profile" role="tabpanel">
-                      <table class="table table-hover table-dark" border="1">
-                        <thead>
-                          <tr>
-                            <th>Ảnh</th>
-                            <th>FullName</th>
-                            <th>Giới tính</th>
-                            <th>Email</th>
-                            <th>Phone</th>
-                            <th>Địa chỉ</th>
-                            <th>Action</th>
-                          </tr>
-                        </thead>
-                  
-                        @foreach($user_admins as $user_admin)
+                      </thead>
+                      <tfoot>
                         <tr>
-                          <td>
-                            @if(file_exists(public_path("./uploads_admin/{$user_admin->id}.jpg")))
-                            <img width="100" height="100" src={{"/uploads_admin/{$user_admin->id}.jpg"}} alt="">
-                            @else
-                            <img width="100" height="100" src={{"/uploads_admin/no_photo.jpg"}} alt="">
-                            @endif
-                          </td>
-                          <td>{{$user_admin->name}}</td>
-                          <td>{{$user_admin->sex?"Nam":"Nữ"}}</td>
-                          <td>{{$user_admin->email}}</td>
-                          <td>{{$user_admin->phone}}</td>
-                          <td>{{$user_admin->address}}</td>
-                          <td>
-                            <form action="{{route('user.destroy', ['user'=>$user_admin->id])}}" method="POST" onsubmit="return(confirm('bạn có thực sự muốn xóa?'))">
-                              @method('DELETE')
-                              @csrf
-                              <button type="submit" class="btn btn-icon btn-outline-danger">
-                                <i class="bx bx-trash-alt"></i>
-                              </button>
-                            </form>
-                          </td>
+                          <th>Ảnh</th>
+                          <th>Role</th>
+                          <th>FullName</th>
+                          <th>Email</th>
+                          <th>Phone</th>
+                          <th>Ngày sinh</th>
+                          <th>Giới tính</th>
+                          <th>Address</th>
+                          <th>Action</th> 
                         </tr>
-                        @endforeach
-                      </table>
-                    </div> 
+                    </tfoot>
+                    </table>
                   </div>
+                  {{-- <table class="table table-hover table-dark" border="1">
+                    <thead>
+                      <tr>
+                        <th>Ảnh</th>
+                        <th>FullName</th>
+                        <th>Giới tính</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Địa chỉ</th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+              
+                    @foreach($users as $user)
+                    <tr>
+                      <td>
+                        @if(file_exists(public_path("/uploads_user/{$user->id}.jpg")))
+                        <img width="100" height="100" src={{"/uploads_user/{$user->id}.jpg"}} alt="">
+                        @else
+                        <img width="100" height="100" src={{"/uploads_admin/no_photo.jpg"}} alt="">
+                        @endif
+                      </td>
+                      <td>{{$user->name}}</td>
+                      <td>{{$user->sex?"Nam":"Nữ"}}</td>
+                      <td>{{$user->email}}</td>
+                      <td>{{$user->phone}}</td>
+                      <td>{{$user->address}}</td>
+                      
+                    </tr>
+                    @endforeach
+                  </table> --}}
                 </div>
               </div>
             </div>
-            <!-- /Account -->
           </div>
         </div>
       </div>
     </div>
     <!-- / Content -->
+
+    <script type="text/javascript">
+      $(document).ready( function () {
+        $('#table_user tfoot th').each(function () {
+          var title = $(this).text();
+          if(title != "Ảnh" && title !== "Action"){
+            $(this).html('<input type="text" placeholder="Search ' + title + '" />');
+          }
+        });
+
+        $.ajaxSetup({
+          headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+          }
+        });
+
+        $('#table_user').DataTable({
+          language: {
+            processing: "Đang tải dữ liệu",
+            lengthMenu: "Điều chỉnh số lượng bản ghi trên 1 trang _MENU_ ",
+            info: "Bản ghi từ _START_ đến _END_ Tổng công _TOTAL_ bản ghi",
+            emptyTable: "Không có dữ liệu",
+            paginate: {
+                first: "Trang đầu",
+                previous: "Trang trước",
+                next: "Trang sau",
+                last: "Trang cuối"
+            },
+          },
+          "processing": true,
+          "serverSide": true,
+          "ajax": '{{ route('ajax.user.index') }}',
+          "type": 'POST',
+          "columns": [
+            { "data": "avatar", "name": "avatar" },
+            { "data": "role", "name": "role" },
+            { "data": "name" },
+            { "data": "email" },
+            { "data": "phone", "name": "phone", "orderable": false },
+            { "data": "DOB" },
+            { "data": "sex",
+              render: function(data, type, row) {
+                if(data === 1) {
+                  return 'Nam';
+                }else if (data === 0) {
+                  return 'Nữ';
+                }
+              }
+            },
+            { "data": "address", "orderable": false },
+            { "data": "action", "name": "action", "orderable": false, "searchable": false }
+          ],
+          "pageLength": 5,
+          initComplete: function () {
+            this.api()
+              .columns()
+              .every(function () {
+                  var that = this;
+                  $('input', this.footer()).on('keyup change clear', function () {
+                      if (that.search() !== this.value) {
+                          that.search(this.value).draw();
+                      }
+                  });
+              });
+            },
+        });
+
+        $('body').on('click', '.delete', function () {
+          if (confirm("Bạn có chắc chắn muốn xóa người dùng này?") == true) {
+            var id = $(this).data('id');
+            
+            // ajax
+            $.ajax({
+                type:"POST",
+                url: "{{ url('admin/delete-user') }}",
+                data: { id: id },
+                dataType: 'json',
+                success: function(res){
+                  var oTable = $('#table_user').dataTable();
+                  oTable.fnDraw(false);
+              }
+            });
+          }
+        });
+      });
+    </script>
 @endsection
 
     

@@ -32,10 +32,10 @@
                 @method('PUT')
                 <div class="card-body">
                   <div class="d-flex align-items-start align-items-sm-center gap-4">
-                    @if(file_exists(public_path("/uploads_admin/{$user->id}.jpg")))
-                    <img width="100" height="100" src={{"/uploads_admin/{$user->id}.jpg"}} alt="user-avatar" class="d-block rounded">
+                    @if(file_exists(public_path("/uploads_user/{$user->id}.jpg")))
+                    <img width="100" height="100" src={{"/uploads_user/{$user->id}.jpg"}} alt="user-avatar" class="d-block rounded">
                     @else
-                    <img width="100" height="100" src={{"/uploads_admin/no_photo.png"}} alt="user-avatar" class="d-block rounded">
+                    <img width="100" height="100" src={{"/uploads_user/no_photo.jpg"}} alt="user-avatar" class="d-block rounded">
                     @endif
                     
                     <div class="button-wrapper">

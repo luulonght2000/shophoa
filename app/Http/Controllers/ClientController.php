@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Validator;
 use Cart;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
+use phpDocumentor\Reflection\Types\This;
 
 class ClientController extends Controller
 {
@@ -220,7 +221,7 @@ class ClientController extends Controller
         //insert payment_method
         $data = array();
         $data['payment_option'] = $request->payment_option;
-        $data['payment_status'] = $request->payment_status === 'Thanh toán khi nhận hàng' ? 'Đang chờ xử lý' : 'Đã thanh toán';
+        $data['payment_status'] = $request->payment_option === 'Thanh toán khi nhận hàng' ? 'Đang chờ xử lý' : 'Đã thanh toán';
         $payment_id = DB::table('tbl_payment')->insertGetId($data);
 
         //insert order
@@ -253,7 +254,7 @@ class ClientController extends Controller
 
 
         if ($data['payment_option'] === "Bằng ATM") {
-            return Redirect::to('/payment-atm');
+            $this->checkout_atm();
         } elseif ($data['payment_option'] === "Thanh toán khi nhận hàng") {
             session()->flash('success', 'Mua hàng thành công! Chúng tôi sẽ liên hệ bạn sớm nhất. Cảm ơn quý khách!');
             Cart::destroy();
@@ -267,11 +268,11 @@ class ClientController extends Controller
     public function checkout_atm()
     {
         $vnp_Url = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
-        $vnp_Returnurl = "https://kaopiz-shophoa.com/checkout";
+        $vnp_Returnurl = "http://127.0.0.1:8000/checkout";
         $vnp_TmnCode = "WVZVD7UH";//Mã website tại VNPAY 
         $vnp_HashSecret = "YAPPWUGUNVNRGADJEPHWYKIIPBVHCMYV"; //Chuỗi bí mật
 
-        $vnp_TxnRef = '1256'; //Mã đơn hàng. Trong thực tế Merchant cần insert đơn hàng vào DB và gửi mã này sang VNPAY
+        $vnp_TxnRef = '4324'; //Mã đơn hàng. Trong thực tế Merchant cần insert đơn hàng vào DB và gửi mã này sang VNPAY
         $vnp_OrderInfo = 'Thanh toán đơn hàng';
         $vnp_OrderType = 'billpayment';
         $vnp_Amount = 20000 * 100;
@@ -325,7 +326,7 @@ class ClientController extends Controller
         $returnData = array('code' => '00'
             , 'message' => 'success'
             , 'data' => $vnp_Url);
-            if (isset($_POST['send_order_place'])) {
+            if (isset($_POST['payment_atm'])) {
                 header('Location: ' . $vnp_Url);
                 die();
             } else {

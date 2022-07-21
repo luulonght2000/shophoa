@@ -30,10 +30,10 @@
                   <div class="mb-6 col-md-12">
                     <label class="col-sm-2 col-form-label" for="avatar">Ảnh</label>
                     <div class="col-sm-10">
-                      @if(file_exists(public_path("./uploads_admin/{$user->id}.jpg")))
-                      <img width="320" height="300" src={{"/uploads_admin/{$user->id}.jpg"}} alt="">
+                      @if(file_exists(public_path("./uploads_user/{$user->id}.jpg")))
+                      <img width="320" height="300" src={{"/uploads_user/{$user->id}.jpg"}} alt="">
                       @else
-                      <img width="320" height="300" src={{"/uploads_admin/no_photo.png"}} alt="">
+                      <img width="320" height="300" src={{"/uploads_user/no_photo.png"}} alt="">
                       @endif
                       <input type="file" class="form-control" id="avatar" placeholder="Ảnh thẻ" name="avatar" value="{{old('avatar')}}">
                       <span class="error-message" style="color: red">{{ $errors->first('avatar') }}</span>

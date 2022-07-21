@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Social;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Yajra\DataTables\DataTables;
 
 class UserController extends Controller
 {
@@ -17,14 +20,37 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::orderBy('id', 'DESC')->where('is_admin', 0)->paginate(10);
-        $user_admins = User::orderBy('id', 'DESC')->where('is_admin', 1)->paginate(10);
+        // $users = User::orderBy('id', 'DESC')->where('is_admin', 0)->paginate(10);
+        // $user_admins = User::orderBy('id', 'DESC')->where('is_admin', 1)->paginate(10);
 
-        if ($key = request()->key) {
-            $users = User::orderBy('id', 'DESC')->where('name', 'like', '%' . $key . '%')->paginate(10);
+        // if ($key = request()->key) {
+        //     $users = User::orderBy('id', 'DESC')->where('name', 'like', '%' . $key . '%')->paginate(10);
+        // }
+        if(request()->ajax()){
+            $users = User::orderBy('id', 'DESC')->get(); 
+            return DataTables::of($users)
+                ->addIndexColumn()
+                ->addColumn('role', function($user){
+                    $role = $user->is_admin;
+                    if($role === 1){
+                        return "<p style='color: red'>Admin</p>";
+                    }elseif($role === 2){
+                        return "Nhân viên";
+                    }else{
+                        return "Khách hàng";
+                    }
+                })
+                ->addColumn('avatar', function($user){
+                    if(file_exists(public_path("./uploads_user/$user->id.jpg"))){
+                        return '<img width="100" height="100" src="/uploads_user/'.$user->id.'.jpg" alt="">';
+                    }else{
+                        return '<img width="100" height="100" src="/uploads/no_photo.png"alt="">';
+                    }
+                })
+                ->addColumn('action', 'admin/user/user-action')
+                ->rawColumns(['avatar', 'action', 'role'])->make(true);
         }
-
-        return view('admin/user.index', ['users' => $users, 'user_admins' => $user_admins]);
+        return view('admin/user.index');
     }
 
     /**
@@ -50,12 +76,14 @@ class UserController extends Controller
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:6|confirmed',
             'phone' => 'required|min:10|numeric',
+            'sex' => 'required',
+            'DOB' => 'required|before:' . now()->toDateString(),
         ];
 
         $vaildator = Validator::make($request->all(), $rules);
 
         if ($vaildator->fails())
-            return redirect()->route('user.create')->withErrors($vaildator)->withInput();
+            return redirect()->back()->withErrors($vaildator)->withInput();
         else {
             $user = new User();
 
@@ -66,7 +94,7 @@ class UserController extends Controller
             $user->sex = $request->sex;
             $user->phone = $request->phone;
             $user->address = $request->address;
-            $user->is_admin = 1;
+            $user->is_admin = 2;
 
             $user->save();
 
@@ -126,7 +154,7 @@ class UserController extends Controller
 
             $file = $request->avatar;
             if ($file)
-                $file->move("./uploads_admin/", "$id.jpg");
+                $file->move("./uploads_user/", "$id.jpg");
 
             return redirect()->route('user.index');
         }
@@ -138,11 +166,11 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        $user = User::findOrFail($id);
-        $user->delete();
-        return redirect()->route('user.index');
+        Social::where('user', $request->id)->delete();
+        $user = User::findOrFail($request->id)->delete();
+        return Response()->json($user);
     }
 
     public function showLogin()
