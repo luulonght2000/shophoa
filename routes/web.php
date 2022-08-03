@@ -133,29 +133,3 @@ Route::prefix('admin')->middleware('admin.login')->group(function () {
 
 
 
-//=======================================TEST================================================
-
-// Route::controller('datatables', 'DatatablesController', [
-//     'anyData'  => 'datatables.data',
-//     'getIndex' => 'datatables',
-// ]);
-
-// Route::get('/datatables', [DatatablesController::class, 'getIndex']);
-// Route::get('/anyData', [DatatablesController::class, 'anyData'])->name('datatables.data');
-
-// Route::get('ajax-datatable-crud',   [DataTablesController::class, 'index']);
-// Route::post('add-update-book',      [DataTablesController::class, 'store']);
-// Route::post('edit-book',            [DataTablesController::class, 'edit']);
-// Route::post('delete-book',          [DataTablesController::class, 'destroy']);
-// Route::resource('product', DataTablesController::class);
-Route::controller(AutoSearchController::class)->group(function(){
-    Route::get('demo-search', 'index');
-    Route::get('autocomplete', 'autocomplete')->name('autocomplete');
-});
-
-Route::get('/book-list', [AutoSearchController::class, 'bookList'])->name('book.list');
-Route::get('book-edit/{id}',[AutoSearchController::class,'bookEdit']);
-Route::post('book-update',[AutoSearchController::class,'bookUpdate'])->name('book.update');
-
-Route::get('/start',[AutoSearchController::class,'start']);
-Route::get('/product-detail/{id}', [HomeController::class, 'product_detail']);
