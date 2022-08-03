@@ -13,8 +13,10 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Cart;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Str;
 use phpDocumentor\Reflection\Types\This;
 
 class ClientController extends Controller
@@ -74,6 +76,42 @@ class ClientController extends Controller
         $categories = CategoryModel::orderBy('id', 'DESC')->get();
 
         return view('home.profile_client', ['user' => $user, 'categories' => $categories, 'products' => $products]);
+    }
+
+    public function order_info_user($id){
+        $user = User::findOrFail($id);
+        $orders = DB::table('tbl_order')->where('tbl_order.user_id', '=', $id)
+        ->whereIn('order_status', ['Đang chờ xử lý', 'Xác nhận thành công', 'Đang đóng gói', 'Đang giao hàng'])->get();
+        $orders_success = DB::table('tbl_order')->where('tbl_order.user_id', '=', $id)
+        ->whereIn('order_status', ['Giao hàng thành công'])->paginate(5);
+        $products = ProductModel::orderBy('id', 'DESC')->paginate(12);
+        $categories = CategoryModel::orderBy('id', 'DESC')->get();
+        $count_order = $this->count_order($id);
+
+        return view('home.order_info', ['user' => $user, 'categories' => $categories, 'products' => $products, 'count_order' => $count_order, 'orders' => $orders, 'orders_success' => $orders_success]);
+    }
+
+    public function count_order($id){
+        $count = DB::table('tbl_order')->select('order_id')
+                ->groupBy('user_id')->where('user_id', $id)
+                ->whereIn('order_status', ['Đang chờ xử lý', 'Xác nhận thành công', 'Đang đóng gói', 'Đang giao hàng'])
+                ->count();
+        return $count;
+    }
+
+    public function order_detail_user($order_id){
+        $order = DB::table('tbl_order')
+        ->join('tbl_payment', 'tbl_payment.payment_id', '=', 'tbl_order.payment_id')
+        ->join('shipping_models', 'shipping_models.id', '=', 'tbl_order.shipping_id')
+        ->select('tbl_payment.*', 'tbl_order.*', 'shipping_models.*')
+        ->where('tbl_order.order_id', '=', $order_id)->first();
+
+        $orderDetail = DB::table('tbl_order')
+            ->join('tbl_order_details', 'tbl_order.order_id', '=', 'tbl_order_details.order_id')
+            ->where('tbl_order.order_id', $order_id)
+            ->select('tbl_order.*', 'tbl_order_details.*')->get();
+
+        return view('home.order_detail', compact('order', 'orderDetail'));
     }
 
     /**
@@ -216,7 +254,6 @@ class ClientController extends Controller
 
     public function order_place(OrderPlaceRequest $request)
     {
-        $categories = CategoryModel::orderBy('id', 'DESC')->get();
 
         //insert payment_method
         $data = array();
@@ -231,10 +268,12 @@ class ClientController extends Controller
         }elseif(session()->get('id')){
             $order_data['user_id'] = session()->get('id');
         }
+        $order_data['order_code'] =  substr(md5(mt_rand()), 0, 8);
         $order_data['shipping_id'] = $request->session()->get("shipping_id", 0);
         $order_data['payment_id'] = $payment_id;
         $order_data['order_total'] = Cart::subtotal();
         $order_data['order_status'] = "Đang chờ xử lý";
+        $order_data['created_at'] =  Carbon::now();
         $order_id = DB::table('tbl_order')->insertGetId($order_data);
 
         //insert order_detail
@@ -259,10 +298,15 @@ class ClientController extends Controller
             session()->flash('success', 'Mua hàng thành công! Chúng tôi sẽ liên hệ bạn sớm nhất. Cảm ơn quý khách!');
             Cart::destroy();
             $request->session()->forget('shipping_id');
-            return view('home.client.handcash', ['categories' => $categories]);
+            return Redirect::to('/thankyou');
         }
 
         // return Redirect('/payment');
+    }
+
+    public function thankyou(){
+        $categories = CategoryModel::orderBy('id', 'DESC')->get();
+        return view('home.client.handcash', ['categories' => $categories]);
     }
 
     public function checkout_atm()

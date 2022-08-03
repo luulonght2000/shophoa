@@ -26,6 +26,7 @@ class UserController extends Controller
         // if ($key = request()->key) {
         //     $users = User::orderBy('id', 'DESC')->where('name', 'like', '%' . $key . '%')->paginate(10);
         // }
+        $user_admins = User::orderBy('id', 'ASC')->where('is_admin', 1)->get();
         if(request()->ajax()){
             $users = User::orderBy('id', 'DESC')->get(); 
             return DataTables::of($users)
@@ -50,7 +51,7 @@ class UserController extends Controller
                 ->addColumn('action', 'admin/user/user-action')
                 ->rawColumns(['avatar', 'action', 'role'])->make(true);
         }
-        return view('admin/user.index');
+        return view('admin/user.index', compact('user_admins'));
     }
 
     /**

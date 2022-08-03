@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 
@@ -79,8 +80,11 @@ class OderController extends Controller
 
     public function order_status(Request $request, $id){
         $order_status = $request->shipping;
-        DB::table('tbl_order')->where('order_id', $id)->update(['order_status' => $order_status]);
-        return Redirect::to('/admin/manage-order');
+        DB::table('tbl_order')->where('order_id', $id)
+        ->update([  'order_status' => $order_status,
+                    'updated_at' => Carbon::now(),
+                ]);
+        return redirect()->back()->with('success', 'Thay đổi trạng thái thành công!');
     }
 
     public function unactive($id)
