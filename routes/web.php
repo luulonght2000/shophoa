@@ -144,4 +144,4 @@ Route::prefix('admin')->middleware('admin.login')->group(function () {
 // Route::post('add-update-book',      [DataTablesController::class, 'store']);
 // Route::post('edit-book',            [DataTablesController::class, 'edit']);
 // Route::post('delete-book',          [DataTablesController::class, 'destroy']);
-Route::resource('product', DataTablesController::class);
+// Route::resource('product', DataTablesController::class);
