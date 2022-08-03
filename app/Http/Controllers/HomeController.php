@@ -6,9 +6,15 @@ use App\Models\CategoryModel;
 use App\Models\ProductModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Yajra\DataTables\DataTables;
 
 class HomeController extends Controller
 {
+    public $sorting;
+    public $pagesize;
+
+    public $min_price;
+    public $max_price;
     /**
      * Create a new controller instance.
      *
@@ -16,7 +22,8 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-        // $this->middleware('auth');
+        $this->min_price = 1;
+        $this->max_price = 10000000;
     }
 
     /**
@@ -38,11 +45,39 @@ class HomeController extends Controller
         $product = ProductModel::findOrFail($id);
         $categories = CategoryModel::orderBy('id', 'DESC')->get();
 
-        // foreach ($product as $key => $value) {
-        //     $category_id = $value->category_id;
-        // }
-
         return view('home.detail', ['product' => $product, 'categories' => $categories]);
+    }
+
+    public function productshop(Request $request)
+    {
+        $categories = CategoryModel::all();
+        $count_product_category = DB::table('product_models')
+        ->select('category_id', DB::raw('count(product_models.id) as SL'))
+        ->where('product_models.product_status', 0)
+        ->groupBy('product_models.category_id')->get();
+        $min_price = ProductModel::min('price');
+        $max_price = ProductModel::max('price');
+
+        $filter_min_price = $request->min_price;
+        $filter_max_price = $request->max_price;
+        $sort_price = $request->sort_price;
+
+        if($filter_min_price && $filter_max_price && $sort_price){
+            if($filter_min_price >0 && $filter_max_price >0 && $sort_price === 'tăng dần')
+            {
+                $products = ProductModel::whereBetween('price',[$filter_min_price,$filter_max_price])->orderby('price', 'asc')->get();
+            }elseif($filter_min_price >0 && $filter_max_price >0 && $sort_price === 'giảm dần'){
+                $products = ProductModel::whereBetween('price',[$filter_min_price,$filter_max_price])->orderby('price', 'desc')->get();
+            }
+        }  
+        elseif($sort_price === 'giảm dần'){
+            $products = ProductModel::orderby('price', 'desc')->get();
+        }
+        else{
+            $products = ProductModel::orderby('price', 'asc')->get();
+        }
+        
+        return view('home.shop',compact('products','categories','min_price','max_price','filter_min_price','filter_max_price', 'sort_price', 'count_product_category'));
     }
 
     public function blog()
@@ -66,5 +101,12 @@ class HomeController extends Controller
         $category = CategoryModel::findOrFail($id);
 
         return view('home.category_page', ['products' => $products, 'categories' => $categories, 'category' => $category]);
+    }
+
+    public function product_detail($id){
+        $product = ProductModel::findOrFail($id);
+        $categories = CategoryModel::orderBy('id', 'DESC')->get();
+
+        return view('home.product_detail', ['product' => $product, 'categories' => $categories]);
     }
 }
