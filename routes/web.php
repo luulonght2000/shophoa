@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AutoSearchController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\ExcelController;
@@ -37,10 +38,15 @@ Route::prefix('/')->group(function () {
     Route::resource('/', \App\Http\Controllers\HomeController::class);
     // Route::get('/product', 'App\Http\Controllers\HomeController@product');
     Route::get('/productDetail/{id}', [HomeController::class, 'productDetail']);
+    Route::any('/product-shop', [HomeController::class, 'productshop'])->name('product.shop');
+
     Route::get('/category-page/{id}', [HomeController::class, 'category_page']);
     Route::get('/blog',               [HomeController::class, 'blog']);
+    Route::get('/test',               [HomeController::class, 'count_product_category']);
     Route::get('/contact',            [HomeController::class, 'contact'])->name('contact');
     Route::resource('profile',        ClientController::class)->middleware('checkProfile');
+    Route::get('order-info/{id}',        [ClientController::class, 'order_info_user'])->middleware('checkProfile');
+    Route::get('order-detail/{id}',        [ClientController::class, 'order_detail_user'])->middleware('checkProfile');
 });
 
 //===============================Cart Checkout=============================================
@@ -55,6 +61,7 @@ Route::prefix('/')->middleware('checkAddCart')->group(function () {
     Route::post('/order-place',             [ClientController::class, 'order_place']);
     Route::delete('/delete-order/{shipping_id}',  [ClientController::class, 'delete_order']);
     Route::post('/checkout-atm',                [ClientController::class, 'checkout_atm']);
+    Route::get('/thankyou',                [ClientController::class, 'thankyou']);
 });
 
 
@@ -71,10 +78,6 @@ Route::prefix('/')->group(function () {
 
 
 //--------------------------Login Facebook--------------------------------
-// Route::controller(SocialController::class)->group(function () {
-//     Route::get('facebook', 'redirectToFacebook')->name('auth.facebook');
-//     Route::any('facebook/callback', 'callback_facebook');
-// });
 
 Route::get('/facebook',      [SocialController::class, 'redirectToFacebook'])->name('auth.facebook')->middleware('checkGetLogin');;
 Route::get('/facebook/callbackFB', [SocialController::class, 'callback_facebook']);
@@ -144,4 +147,15 @@ Route::prefix('admin')->middleware('admin.login')->group(function () {
 // Route::post('add-update-book',      [DataTablesController::class, 'store']);
 // Route::post('edit-book',            [DataTablesController::class, 'edit']);
 // Route::post('delete-book',          [DataTablesController::class, 'destroy']);
-Route::resource('product', DataTablesController::class);
+// Route::resource('product', DataTablesController::class);
+Route::controller(AutoSearchController::class)->group(function(){
+    Route::get('demo-search', 'index');
+    Route::get('autocomplete', 'autocomplete')->name('autocomplete');
+});
+
+Route::get('/book-list', [AutoSearchController::class, 'bookList'])->name('book.list');
+Route::get('book-edit/{id}',[AutoSearchController::class,'bookEdit']);
+Route::post('book-update',[AutoSearchController::class,'bookUpdate'])->name('book.update');
+
+Route::get('/start',[AutoSearchController::class,'start']);
+Route::get('/product-detail/{id}', [HomeController::class, 'product_detail']);
